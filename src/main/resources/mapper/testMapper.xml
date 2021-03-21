@@ -1,0 +1,11 @@
+<root namespace="com.test.entity.User">
+
+    <select id="getUser">
+        select * from user where id = {id} and name={name}
+    </select>
+
+    <insert id="insert">
+
+    </insert>
+
+</root>
