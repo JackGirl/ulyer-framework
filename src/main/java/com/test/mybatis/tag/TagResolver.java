@@ -1,6 +1,6 @@
 package com.test.mybatis.tag;
 
-import com.test.mybatis.mapper.Mapper;
+import com.test.mybatis.mapper.MapperMethod;
 
 import java.util.Map;
 
@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public interface TagResolver {
 
-    String resolverDynamicTag(Mapper mapper, Map<String,Object> params);
+    String resolverDynamicTag(MapperMethod mapperMethod, Map<String,Object> params);
 
 }

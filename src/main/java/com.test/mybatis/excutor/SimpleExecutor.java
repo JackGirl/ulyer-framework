@@ -2,7 +2,8 @@ package com.test.mybatis.excutor;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import com.test.connection.DbConnectionUtil;
-import com.test.mybatis.mapper.Mapper;
+import com.test.mybatis.factory.OrmConfiguration;
+import com.test.mybatis.mapper.MapperMethod;
 import com.test.mybatis.parameter.ParameterResolver;
 import com.test.mybatis.result.ResultTypeHandler;
 import com.test.mybatis.tag.TagResolver;
@@ -32,17 +33,25 @@ public class SimpleExecutor implements Executor {
 
     Map<Class<?>,ResultTypeHandler> typeHandlers;
 
+    public SimpleExecutor (OrmConfiguration ormConfiguration){
+        this.initTypeHandlers(ormConfiguration);
+    }
+
+    protected void initTypeHandlers(OrmConfiguration ormConfiguration) {
+
+    }
+
 
     @Override
-    public Object execute(Mapper mapper, Map<String,Object> params) {
+    public Object execute(MapperMethod mapperMethod, Map<String,Object> params) {
         Connection connection = DbConnectionUtil.getConnection();
         ResultSet resultSet = null;
         PreparedStatement statement = null;
         try {
-            statement  = connection.prepareStatement(mapper.getSql().replaceAll("\\{(.+?)\\}"," ? "));
-            parameterResolver.setParameter(statement, mapper.getSql(),params);
+            statement  = connection.prepareStatement(mapperMethod.getSql().replaceAll("\\{(.+?)\\}"," ? "));
+            parameterResolver.setParameter(statement, mapperMethod.getSql(),params);
             connection.setAutoCommit(false);
-            switch (mapper.getMapperSqlType()){
+            switch (mapperMethod.getMapperSqlType()){
                 case SELECT:
                     return executeQuery(connection,statement);
                 case DELETE:
@@ -50,7 +59,7 @@ public class SimpleExecutor implements Executor {
                 case UPDATE:
                     return executeUpdate(connection,statement);
                 default:
-                    throw  new IllegalStateException("no  excutor type for this mapperSql"+ mapper.getId());
+                    throw  new IllegalStateException("no  excutor type for this mapperSql"+ mapperMethod.getId());
             }
         } catch (Exception e) {
             LogUtils.error(e,"mybatis excutor error :"+ ExceptionUtil.stacktraceToString(e));

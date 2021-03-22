@@ -1,13 +1,10 @@
 package com.test.mybatis.mapper;
 
-import com.test.entity.User;
 import com.test.mybatis.enums.MapperSqlType;
 import lombok.Data;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +14,7 @@ import java.util.Map;
  * @Date: Create in 20:54 2021/3/20
  */
 @Data
-public class Mapper {
+public class MapperMethod {
 
     private String sql;
 
@@ -33,7 +30,7 @@ public class Mapper {
 
 
     public static void main(String[] args) {
-       Class c = Mapper.class;
+       Class c = MapperMethod.class;
        Method[]methods  = c.getDeclaredMethods();
         for (Method method : methods) {
             Type returnType = method.getGenericReturnType();

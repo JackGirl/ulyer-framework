@@ -1,6 +1,6 @@
 package com.test.mybatis.excutor;
 
-import com.test.mybatis.mapper.Mapper;
+import com.test.mybatis.mapper.MapperMethod;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 public interface Executor {
 
 
-    Object execute(Mapper mapper, Map<String,Object> params) ;
+    Object execute(MapperMethod mapperMethod, Map<String,Object> params) ;
 
 
 }

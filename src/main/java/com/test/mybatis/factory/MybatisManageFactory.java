@@ -2,8 +2,9 @@ package com.test.mybatis.factory;
 
 import com.test.mybatis.excutor.Executor;
 import com.test.mybatis.excutor.SimpleExecutor;
+import com.test.mybatis.mapper.DefaultMapperScanner;
 import com.test.mybatis.mapper.MapperDefinition;
-import com.test.mybatis.mapper.Mapper;
+import com.test.mybatis.mapper.MapperScanner;
 import lombok.Data;
 
 import java.util.Map;
@@ -14,16 +15,18 @@ import java.util.Map;
  * @Date: Create in 20:53 2021/3/20
  */
 @Data
-public class MybatisManageFactory {
+public class MybatisManageFactory implements OrmFactory{
+
+    private MapperScanner mapperScanner;
+
+    private Executor executor ;
 
 
-    private Map<String , MapperDefinition> mappers;
-
-
-    private Executor executor = new SimpleExecutor();
-
-    public Object executeResult(Mapper mapper, Map<String,Object> params){
-            return executor.execute(mapper,params);
+    public MybatisManageFactory(OrmConfiguration ormConfiguration){
+        this.mapperScanner = new DefaultMapperScanner();
+        this.executor = new SimpleExecutor(ormConfiguration);
     }
+
+
 
 }

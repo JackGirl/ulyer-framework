@@ -14,5 +14,5 @@ public class MapperDefinition {
 
     private String namespace;
 
-    private List<Mapper> mapper;
+    private List<MapperMethod> mapperMethod;
 }
