@@ -1,9 +1,7 @@
 package com.test.mybatis.parameter;
 
-import com.test.mybatis.MapperSql;
 import com.test.mybatis.utils.LogUtils;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,31 +19,20 @@ public class RegexParameterResolver implements ParameterResolver {
     Pattern pattern = Pattern.compile("\\{(.+?)\\}");
 
 
-
     @Override
-    public PreparedStatement resolverParameter(Connection connection,MapperSql mapperSql, Map<String, Object> params) {
+    public void setParameter(PreparedStatement preparedStatement, String tagSql, Map<String, Object> params) {
         try {
-            Matcher matcher = pattern.matcher(mapperSql.getSql());
+            Matcher matcher = pattern.matcher(tagSql);
             List<String> parameterList = new ArrayList<>();
+            int index = 1;
             while (matcher.find()){
                 String parameterName = matcher.group();
-                parameterList.add(parameterName.replaceAll("[{}]",""));
-                mapperSql.setSql( mapperSql.getSql().replace(parameterName," ? "));
+                String paramName = parameterName.replaceAll("[{}]","");
+                preparedStatement.setString(index, (String) params.get(paramName));
             }
-            PreparedStatement preparedStatement =  connection.prepareStatement(mapperSql.getSql());
-            for (int i = 0; i < parameterList.size() ; i++) {
-                String value = (String) params.get(parameterList.get(i));
-                preparedStatement.setString(i+1,value );
-            }
-            return preparedStatement;
+
         }catch (Exception e){
             LogUtils.error(e,"参数解析失败");
-            return null;
         }
     }
-
-
-
-
-
 }

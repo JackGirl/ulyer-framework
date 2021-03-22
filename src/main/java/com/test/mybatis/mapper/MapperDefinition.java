@@ -1,4 +1,4 @@
-package com.test.mybatis;
+package com.test.mybatis.mapper;
 
 import lombok.Data;
 
@@ -14,5 +14,5 @@ public class MapperDefinition {
 
     private String namespace;
 
-    private List<MapperSql> mapperSql;
+    private List<Mapper> mapper;
 }

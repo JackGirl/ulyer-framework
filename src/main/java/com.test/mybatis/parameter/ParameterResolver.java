@@ -1,8 +1,5 @@
 package com.test.mybatis.parameter;
 
-import com.test.mybatis.MapperSql;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.Map;
 
@@ -13,7 +10,7 @@ import java.util.Map;
  */
 public interface ParameterResolver {
 
-    PreparedStatement resolverParameter(Connection connection, MapperSql mapperSql, Map<String, Object> params);
+    void setParameter( PreparedStatement preparedStatement,String tagSql,Map<String,Object> params);
 
 
 }

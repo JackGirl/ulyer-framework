@@ -14,4 +14,6 @@ public class Test2 {
 
     private String testUserName;
 
+    private String idCard;
+
 }
