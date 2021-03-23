@@ -2,7 +2,9 @@ package com.test.mybatis.mapper;
 
 import lombok.Data;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: yeqi
@@ -14,5 +16,7 @@ public class MapperDefinition {
 
     private String namespace;
 
-    private List<MapperMethod> mapperMethod;
+    private Class<?> mapperClass;
+
+    private Map<Method,MapperMethod> mapperMethodMap;
 }

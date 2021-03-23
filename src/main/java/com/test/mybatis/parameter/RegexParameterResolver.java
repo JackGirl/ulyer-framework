@@ -23,7 +23,6 @@ public class RegexParameterResolver implements ParameterResolver {
     public void setParameter(PreparedStatement preparedStatement, String tagSql, Map<String, Object> params) {
         try {
             Matcher matcher = pattern.matcher(tagSql);
-            List<String> parameterList = new ArrayList<>();
             int index = 1;
             while (matcher.find()){
                 String parameterName = matcher.group();

@@ -24,20 +24,11 @@ public class MapperMethod {
 
     private List<String> parameterNames;
 
+    private Method method;
+
     private Map<String,Object> parameters;
 
     private Class<?> resultType;
 
-
-    public static void main(String[] args) {
-       Class c = MapperMethod.class;
-       Method[]methods  = c.getDeclaredMethods();
-        for (Method method : methods) {
-            Type returnType = method.getGenericReturnType();
-            System.out.println(returnType);
-            System.out.println(returnType.getTypeName());
-        }
-
-    }
 
 }

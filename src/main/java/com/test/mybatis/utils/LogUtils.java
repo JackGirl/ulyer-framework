@@ -12,6 +12,10 @@ public class LogUtils {
 
     private LogUtils(){}
 
+    public static void error(Exception e){
+        System.out.println("error stacktrace:"+ ExceptionUtil.stacktraceToString(e));
+    }
+
     public static void error(Exception e,String msg){
         System.out.println("error msg: "+msg+"error stacktrace:"+ ExceptionUtil.stacktraceToString(e));
     }

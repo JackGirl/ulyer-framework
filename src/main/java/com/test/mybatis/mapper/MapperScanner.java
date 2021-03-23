@@ -1,16 +1,17 @@
 package com.test.mybatis.mapper;
 
-import com.test.mybatis.factory.OrmConfiguration;
+import com.test.mybatis.config.OrmConfiguration;
 
+import java.io.InputStream;
 import java.util.Map;
 
 public interface MapperScanner {
 
-    void register(Class<?> mapperClass);
+    MapperDefinition register(Class<?> mapperClass);
 
-    void scanner(OrmConfiguration configuration);
+    MapperDefinition register(InputStream stream);
 
-    MapperDefinition getMapperDefinitions(Class<?> mapperClass);
+    Map<String,MapperDefinition> scanner(OrmConfiguration configuration);
 
-    Map<Class<?>,MapperDefinition> getDefinitions();
+
 }

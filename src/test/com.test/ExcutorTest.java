@@ -2,10 +2,11 @@ package com.test;
 
 import cn.hutool.core.map.MapUtil;
 import com.alibaba.fastjson.JSON;
-import com.test.mybatis.factory.OrmConfiguration;
-import com.test.mybatis.mapper.MapperMethod;
+import com.test.mybatis.config.OrmConfiguration;
 import com.test.mybatis.enums.MapperSqlType;
+import com.test.mybatis.excutor.AbstractExecutor;
 import com.test.mybatis.excutor.SimpleExecutor;
+import com.test.mybatis.mapper.MapperMethod;
 import com.test.mybatis.parameter.RegexParameterResolver;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class ExcutorTest {
 
     @Test
     public void testExcutor() throws SQLException {
-        SimpleExecutor excutor = new SimpleExecutor(new OrmConfiguration());
+        AbstractExecutor excutor = new SimpleExecutor(new OrmConfiguration());
         excutor.setParameterResolver(new RegexParameterResolver());
         MapperMethod mapperMethod = new MapperMethod();
         mapperMethod.setMapperSqlType(MapperSqlType.SELECT);

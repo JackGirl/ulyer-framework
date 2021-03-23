@@ -1,11 +1,11 @@
-<root namespace="com.test.entity.User">
+<root namespace="com.test.entity.Test2" version="orm1">
 
     <select id="getUser">
-        select * from user where id = {id} and name={name}
+        select * from test_2 where id = {id}
     </select>
 
     <insert id="insert">
-
+        select * from test_2 where id = {id}
     </insert>
 
 </root>

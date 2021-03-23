@@ -12,7 +12,10 @@ import java.util.Map;
 public interface Executor {
 
 
-    Object execute(MapperMethod mapperMethod, Map<String,Object> params) ;
+    <T> T execute(MapperMethod mapperMethod, Map<String,Object> params) ;
+
+
+
 
 
 }
