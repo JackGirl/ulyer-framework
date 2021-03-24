@@ -1,6 +1,6 @@
-package com.test.dao;
+package cn.ulyer.demo.dao;
 
-import com.test.entity.User;
+import cn.ulyer.demo.entity.User;
 import cn.ulyer.orm.annotation.Insert;
 
 public interface UserMapper {

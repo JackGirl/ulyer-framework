@@ -21,13 +21,6 @@ public abstract class AbstractBaseMapperScanner implements MapperScanner {
     @Override
     public abstract MapperDefinition register(Class<?> mapperClass) ;
 
-
-
-    /**
-     *
-     * @param stream
-     * @return
-     */
     @Override
     public abstract MapperDefinition register(InputStream stream);
 
@@ -48,14 +41,14 @@ public abstract class AbstractBaseMapperScanner implements MapperScanner {
         } catch (Exception e) {
             LogUtils.error(e);
         }
-        for (String location : configuration.getMapperLocations()){
+/*        for (String location : configuration.getMapperLocations()){
             File mapperLocationDir = new File(location);
             List<File> xmlFiles = ResourceUtils.loadFileFromDir(mapperLocationDir);
             for (File xmlFile : xmlFiles) {
                 MapperDefinition mapperDefinition  = register(new FileInputStream(xmlFile));
                 registerMapper(mapperDefinition,mappers);
             }
-        }
+        }*/
         return mappers;
     }
 

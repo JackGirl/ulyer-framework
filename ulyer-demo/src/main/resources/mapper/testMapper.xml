@@ -1,4 +1,4 @@
-<orm namespace="com.test.entity.Test2" version="orm1">
+<orm namespace="cn.ulyer.demo.entity.Test2" version="orm1">
 
     <select id="getUser">
         select * from test_2 where id = {id}

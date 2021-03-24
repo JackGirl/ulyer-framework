@@ -1,4 +1,4 @@
-package com.test.entity;
+package cn.ulyer.demo.entity;
 
 import lombok.Data;
 

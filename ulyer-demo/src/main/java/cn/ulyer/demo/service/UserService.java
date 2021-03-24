@@ -1,7 +1,7 @@
-package com.test.service;
+package cn.ulyer.demo.service;
 
 import cn.ulyer.orm.connection.DbConnectionUtil;
-import com.test.entity.User;
+import cn.ulyer.demo.entity.User;
 
 import java.sql.*;
 

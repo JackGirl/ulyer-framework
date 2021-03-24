@@ -19,6 +19,9 @@ public class ResourceUtils {
 
     public static void loadClassFromFile(String packName,  Set<Class<?>> jarClasses) throws ClassNotFoundException, IOException {
         URL url = Thread.currentThread().getContextClassLoader().getResource(packName.replace(".", "/"));
+        if(url==null){
+            return;
+        }
         String protocol = url.getProtocol();
         if (StrUtil.equals(protocol, "jar")) {
             JarFile jarFile = ((JarURLConnection) url.openConnection()).getJarFile();
