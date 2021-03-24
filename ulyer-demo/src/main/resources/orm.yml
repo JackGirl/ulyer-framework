@@ -1,0 +1,5 @@
+orm:
+  mapperLocations:
+    - mapper
+  basePackages:
+    - com.test.mapper
