@@ -12,25 +12,19 @@ public class DefaultReaderFilter implements  AnnotationReader{
 
     public DefaultReaderFilter(){
         annotationReaders = new ArrayList<>();
-        annotationReaders.add(new SelectAnnotationReader());
         annotationReaders.add(new UpdateAnnotaionReader());
         annotationReaders.add(new InsertAnnotaionReader());
         annotationReaders.add(new DeleteAnnotationReader());
+        annotationReaders.add(new SelectAnnotationReader());
     }
 
 
+
+
     @Override
-    public <T> T read(Class<?> mapperClass, Method method) {
-        MapperMethod mapperMethod ;
+    public void read(Class<?> mapperClass, Method method, MapperMethod mapperMethod) {
         for (AnnotationReader annotationReader : annotationReaders) {
-             mapperMethod  = annotationReader.read(mapperClass,method);
-            if(mapperMethod!=null){
-                return (T) mapperMethod;
-            }
+            annotationReader.read(mapperClass,method,mapperMethod);
         }
-        mapperMethod = new MapperMethod();
-        mapperMethod.setResultType(method.getReturnType());
-        mapperMethod.setId(mapperClass.getName()+"."+method.getName());
-        return (T) mapperMethod;
     }
 }

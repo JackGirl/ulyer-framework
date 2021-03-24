@@ -1,5 +1,6 @@
 package cn.ulyer.orm.mapper;
 
+import cn.ulyer.orm.mapper.reader.AnnotationReader;
 import cn.ulyer.orm.mapper.reader.DefaultReaderFilter;
 
 import java.io.InputStream;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 public class SimpleMapperScanner  extends AbstractBaseMapperScanner{
 
-    private DefaultReaderFilter definitionReaderFilter;
+    private AnnotationReader definitionReaderFilter;
 
     public SimpleMapperScanner(){
         definitionReaderFilter = new DefaultReaderFilter();
@@ -24,7 +25,11 @@ public class SimpleMapperScanner  extends AbstractBaseMapperScanner{
         Map<String,MapperMethod> methodMap = new HashMap<>(20);
         Method[] methods = mapperClass.getDeclaredMethods();
         for (Method method : methods) {
-           MapperMethod mapperMethod = definitionReaderFilter.read(mapperClass,method);
+            MapperMethod mapperMethod = new MapperMethod();
+            mapperMethod.setId(mapperClass.getName()+"."+method.getName());
+            mapperMethod.setMethod(method);
+            mapperMethod.setResultType(method.getReturnType());
+            definitionReaderFilter.read(mapperClass,method,mapperMethod);
            methodMap.put(mapperMethod.getId(),mapperMethod);
         }
         definition.setMapperMethodMap(methodMap);

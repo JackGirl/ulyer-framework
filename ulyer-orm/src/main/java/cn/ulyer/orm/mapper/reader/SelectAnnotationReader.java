@@ -8,18 +8,13 @@ import java.lang.reflect.Method;
 
 public class SelectAnnotationReader implements AnnotationReader {
 
+
     @Override
-    public <T> T read(Class<?> mapperClass, Method method) {
+    public void read(Class<?> mapperClass, Method method, MapperMethod mapperMethod) {
         Select select = method.getAnnotation(Select.class);
-        if(select!=null){
-            MapperMethod mapperMethod = new MapperMethod();
-            mapperMethod.setId(mapperClass.getName()+"."+method.getName());
-            mapperMethod.setMethod(method);
+        if(select!=null) {
             mapperMethod.setMapperSqlType(MapperSqlType.SELECT);
             mapperMethod.setSql(select.sql());
-            mapperMethod.setResultType(method.getReturnType());
-            return (T) mapperMethod;
         }
-        return null;
     }
 }

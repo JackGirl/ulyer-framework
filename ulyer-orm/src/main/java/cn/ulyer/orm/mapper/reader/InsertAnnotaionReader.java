@@ -9,18 +9,14 @@ import java.lang.reflect.Method;
 
 public class InsertAnnotaionReader implements AnnotationReader {
 
+
+
     @Override
-    public <T> T read(Class<?> mapperClass, Method method) {
+    public void read(Class<?> mapperClass, Method method, MapperMethod mapperMethod) {
         Insert insert = method.getAnnotation(Insert.class);
         if(insert!=null){
-            MapperMethod mapperMethod = new MapperMethod();
-            mapperMethod.setId(mapperClass.getName()+"."+method.getName());
-            mapperMethod.setMethod(method);
             mapperMethod.setMapperSqlType(MapperSqlType.INSERT);
             mapperMethod.setSql(insert.sql());
-            mapperMethod.setResultType(method.getReturnType());
-            return (T) mapperMethod;
         }
-        return null;
     }
 }
