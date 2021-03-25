@@ -11,7 +11,6 @@ public class ConfigurationTest {
 
     @Test
     public void test() throws FileNotFoundException {
-        PageInterceptor pageInterceptor = new PageInterceptor();
         OrmConfiguration ormConfiguration = ResourceConfigurationLoader.loadConfiguration("orm.yml");
         System.out.println(ormConfiguration);
     }

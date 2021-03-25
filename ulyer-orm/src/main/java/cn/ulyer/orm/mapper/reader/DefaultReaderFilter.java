@@ -12,6 +12,7 @@ public class DefaultReaderFilter implements  AnnotationReader{
 
     public DefaultReaderFilter(){
         annotationReaders = new ArrayList<>();
+        annotationReaders.add(new ParameterAnnotaionReader());
         annotationReaders.add(new UpdateAnnotaionReader());
         annotationReaders.add(new InsertAnnotaionReader());
         annotationReaders.add(new DeleteAnnotationReader());

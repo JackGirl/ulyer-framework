@@ -14,7 +14,7 @@ public class MapMapperProvider  implements MapperProvider{
 
     Map<String,MapperDefinition> mappers = new ConcurrentHashMap<>(100);
 
-    public MapMapperProvider(OrmConfiguration ormConfiguration,List<MapperScanner> scanners){
+    public MapMapperProvider(OrmConfiguration ormConfiguration){
         this.setScanners(scanners);
         for (MapperScanner scanner : scanners) {
             mappers.putAll(scanner.scanner(ormConfiguration));

@@ -20,6 +20,8 @@ public class Plugin implements InvocationHandler {
     }
 
 
+
+
     public static Object wrap(Object target, Interceptor interceptor) {
         Class<?> type = target.getClass();
         HashSet interfaces;

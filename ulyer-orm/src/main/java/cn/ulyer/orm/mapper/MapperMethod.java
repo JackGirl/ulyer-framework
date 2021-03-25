@@ -21,7 +21,7 @@ public class MapperMethod {
 
     private MapperSqlType mapperSqlType;
 
-    private List<String> parameterNames;
+    private List<ParameterMapping> parameterMappings;
 
     private Method method;
 

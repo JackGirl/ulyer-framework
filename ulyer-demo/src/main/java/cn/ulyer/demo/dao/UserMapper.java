@@ -6,8 +6,7 @@ import cn.ulyer.orm.annotation.Insert;
 public interface UserMapper {
 
     @Insert(sql = "insert into user values({id},{name})")
-    int saveUser(User user);
-
+    int saveUser(User user,Integer a);
 
 
     User getById(String id);

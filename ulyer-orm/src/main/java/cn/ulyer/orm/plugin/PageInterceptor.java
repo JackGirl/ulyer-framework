@@ -6,6 +6,7 @@ import cn.ulyer.orm.enums.PluginType;
  * 分页
  * @author ulyer
  */
+
 public class PageInterceptor implements OrmInterceptor {
 
     public PageInterceptor(){}

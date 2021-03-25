@@ -4,6 +4,8 @@ import cn.ulyer.demo.proxy.*;
 import lombok.Data;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,14 +15,19 @@ public class ProxyTest {
 
 
 
+
+
     @Test
     public void test(){
 
-        Excutor excutor = new SimpleExecutor();
+        SimpleExecutor excutor = new SimpleExecutor();
 
-        excutor = (Excutor) createProxy(excutor);
+       // excutor = (Excutor) createProxy(excutor);
+        Invo invo = new Invo();
 
-        excutor.execute("aaaa");
+        Excutor e = (Excutor) invo.newInstance(excutor,invo);
+
+        String b = (String) e.execute("aaaa");
 
 
 
@@ -34,11 +41,15 @@ public class ProxyTest {
         interceptors.add(new PageInterceptor());
         interceptors.add(new OtherInterceptor());
         Interceptor interceptor;
-        for(Iterator var2 = interceptors.iterator(); var2.hasNext(); target = Plugin.wrap(target,interceptor)) {
+        for(Iterator var2 = interceptors.iterator(); var2.hasNext();) {
             interceptor = (Interceptor)var2.next();
+            target = Plugin.wrap(target,interceptor);
+
         }
-        return target;
+    return target;
     }
+
+
 
 
 

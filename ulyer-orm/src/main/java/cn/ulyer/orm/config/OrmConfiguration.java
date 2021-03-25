@@ -1,9 +1,9 @@
 package cn.ulyer.orm.config;
 
 import cn.ulyer.orm.plugin.OrmInterceptor;
-import cn.ulyer.orm.result.ResultTypeHandler;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -15,9 +15,11 @@ public class OrmConfiguration {
 
     private boolean mapperUnderScore = false;
 
-    public Set<Class<? extends ResultTypeHandler>> typeHandlerClasses;
+    public Set<String> typeHandlerClasses;
 
-    private Set<Class<? extends OrmInterceptor>> pluginClasses;
+    private Set<String> pluginClasses;
+
+    private List<OrmInterceptor> ormInterceptors;
 
     public void setBasePackages(String ... packages){
         this.basePackages = packages;

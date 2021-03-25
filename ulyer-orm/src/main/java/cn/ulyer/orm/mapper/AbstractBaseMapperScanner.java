@@ -6,6 +6,7 @@ import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.utils.LogUtils;
 import cn.ulyer.orm.utils.ResourceUtils;
 import lombok.SneakyThrows;
+import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +23,7 @@ public abstract class AbstractBaseMapperScanner implements MapperScanner {
     public abstract MapperDefinition register(Class<?> mapperClass) ;
 
     @Override
-    public abstract MapperDefinition register(InputStream stream);
+    public abstract MapperDefinition register(InputStream stream) throws Exception;
 
 
     @SneakyThrows
@@ -41,14 +42,14 @@ public abstract class AbstractBaseMapperScanner implements MapperScanner {
         } catch (Exception e) {
             LogUtils.error(e);
         }
-/*        for (String location : configuration.getMapperLocations()){
-            File mapperLocationDir = new File(location);
+        for (String location : configuration.getMapperLocations()){
+            File mapperLocationDir = new File(Thread.currentThread().getContextClassLoader().getResource(location).getPath());
             List<File> xmlFiles = ResourceUtils.loadFileFromDir(mapperLocationDir);
             for (File xmlFile : xmlFiles) {
                 MapperDefinition mapperDefinition  = register(new FileInputStream(xmlFile));
                 registerMapper(mapperDefinition,mappers);
             }
-        }*/
+        }
         return mappers;
     }
 
