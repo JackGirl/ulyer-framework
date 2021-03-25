@@ -1,6 +1,6 @@
 package cn.ulyer.orm.config;
 
-import cn.ulyer.orm.plugin.OrmPlugin;
+import cn.ulyer.orm.plugin.OrmInterceptor;
 import cn.ulyer.orm.result.ResultTypeHandler;
 import lombok.Data;
 
@@ -17,7 +17,7 @@ public class OrmConfiguration {
 
     public Set<Class<? extends ResultTypeHandler>> typeHandlerClasses;
 
-    private Set<Class<? extends OrmPlugin>> pluginClasses;
+    private Set<Class<? extends OrmInterceptor>> pluginClasses;
 
     public void setBasePackages(String ... packages){
         this.basePackages = packages;

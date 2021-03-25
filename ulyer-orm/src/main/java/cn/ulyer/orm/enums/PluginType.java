@@ -2,7 +2,7 @@ package cn.ulyer.orm.enums;
 
 public enum PluginType {
     PREPARE,
-    PRAMETER,
+    PARAMETER,
     EXECUTE,
     RESULT
 
