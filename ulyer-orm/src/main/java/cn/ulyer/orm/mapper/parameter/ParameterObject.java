@@ -1,6 +1,7 @@
 package cn.ulyer.orm.mapper.parameter;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import cn.ulyer.orm.mapper.MapperMethod;
 import cn.ulyer.orm.mapper.ParameterMapping;
 import cn.ulyer.orm.utils.LogUtils;
@@ -22,67 +23,67 @@ public class ParameterObject {
 
     private final static String PARAM_SPLIT = ".";
 
-    public ParameterObject(Object value,Class<?> valueClass,List<ParameterMapping> parameterMappings){
+    public ParameterObject(Object value, Class<?> valueClass, List<ParameterMapping> parameterMappings) {
         this.valueClass = valueClass;
         this.value = value;
         this.parameterMappings = parameterMappings;
     }
 
-    public static ParameterObject newParameter(MapperMethod mapperMethod,Object[] parameter){
-        if(parameter==null){
-            return new ParameterObject(null,Object.class,mapperMethod.getParameterMappings());
+    public static ParameterObject newParameter(MapperMethod mapperMethod, Object[] parameter) {
+        if (parameter == null) {
+            return new ParameterObject(null, Object.class, mapperMethod.getParameterMappings());
         }
-        if(parameter.length==1){
-            return new ParameterObject(parameter[0],parameter[0].getClass(),mapperMethod.getParameterMappings());
+        if (parameter.length == 1) {
+            return new ParameterObject(parameter[0], parameter[0].getClass(), mapperMethod.getParameterMappings());
         }
-        Map<String,Object> value = new HashMap<>(5);
+        Map<String, Object> value = new HashMap<>(5);
         for (int i = 0; i < parameter.length; i++) {
-            value.put("arg"+i,parameter);
+            value.put("arg" + i, parameter);
         }
-        return new ParameterObject(parameter,Map.class,mapperMethod.getParameterMappings());
+        return new ParameterObject(parameter, Map.class, mapperMethod.getParameterMappings());
     }
 
-    public <T> T getParameterByName(String name) throws IllegalAccessException {
+    public <T> T getParameterByName(String name) {
         Object returnVal = null;
-            if(name.contains(PARAM_SPLIT)){
-                String [] splits = name.split(PARAM_SPLIT);
-                 returnVal = null;
-                for (int i = 0; i < splits.length; i++) {
-                    returnVal = getDeepParameterByName(value,splits[i]);
-                    if(returnVal==null){
-                        if(i!=splits.length-1){
-                            throw new IllegalArgumentException("no parameter for nameExpression :" +name);
-                        }
-                        break;
+        if (name.contains(PARAM_SPLIT)) {
+            String[] splits = StrUtil.split(name, PARAM_SPLIT);
+            returnVal = null;
+            for (int i = 0; i < splits.length; i++) {
+                returnVal = getDeepParameterByName(returnVal==null?value:returnVal, splits[i]);
+                if (returnVal == null) {
+                    if (i != splits.length - 1) {
+                        throw new IllegalArgumentException("no parameter for nameExpression :" + name);
                     }
+                    break;
                 }
             }
-            if(returnVal==null){
-                returnVal = getDeepParameterByName(value,name);
-            }
-            Assert.notNull(returnVal);
-            return (T) returnVal;
+        }
+        if (returnVal == null) {
+            returnVal = getDeepParameterByName(value, name);
+        }
+        Assert.notNull(returnVal);
+        return (T) returnVal;
 
     }
 
-    private <T>T getDeepParameterByName(Object target,String name){
+    private <T> T getDeepParameterByName(Object target, String name) {
         Assert.notNull(target);
         Class<?> valClass = target.getClass();
+        if (String.class.equals(valClass)) {
+            return (T) target;
+        }
+        if (Number.class.isAssignableFrom(valClass)) {
+            return (T) target;
+        }
+        if (Map.class.isAssignableFrom(valClass)) {
+            return (T) ((Map) target).get(name);
+        }
         Object returnVal = null;
-        if(String.class.equals(valClass)){
-            returnVal = target;
-        }
-        if(Number.class.isAssignableFrom(valClass)){
-            returnVal = target;
-        }
-        if(Map.class.isAssignableFrom(valClass)) {
-            returnVal =  ((Map)target).get(name);
-        }
-        try{
+        try {
             Field field = valClass.getDeclaredField(name);
             field.setAccessible(true);
-            field.get(target);
-        }catch (Exception e){
+            returnVal = field.get(target);
+        } catch (Exception e) {
             LogUtils.error(e);
             throw new RuntimeException("参数获取入参失败");
         }
@@ -93,7 +94,6 @@ public class ParameterObject {
     public static void main(String[] args) {
         System.out.println(Number.class.isAssignableFrom(int.class));
     }
-
 
 
 }
