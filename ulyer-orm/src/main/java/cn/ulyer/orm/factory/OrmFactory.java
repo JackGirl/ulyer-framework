@@ -1,6 +1,7 @@
 package cn.ulyer.orm.factory;
 
 import cn.ulyer.orm.config.OrmConfiguration;
+import cn.ulyer.orm.excutor.Executor;
 import cn.ulyer.orm.excutor.SqlSession;
 
 import javax.sql.DataSource;
@@ -16,5 +17,7 @@ public interface OrmFactory {
     OrmConfiguration getConfiguration();
 
     SqlSession createSqlSession();
+
+    <T> T getMapper(Class<?> mapper);
 
 }

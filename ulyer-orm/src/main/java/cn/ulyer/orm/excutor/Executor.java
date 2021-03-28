@@ -14,8 +14,7 @@ public interface Executor {
 
     <T> T execute(MapperMethod mapperMethod, Map<String,Object> params) ;
 
-
-
+    <T> T execute(String namespace,Map<String,Object> params);
 
 
 }

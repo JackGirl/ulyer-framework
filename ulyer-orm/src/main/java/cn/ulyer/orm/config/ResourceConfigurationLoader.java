@@ -18,7 +18,6 @@ public class ResourceConfigurationLoader {
     public static OrmConfiguration loadConfiguration(InputStream inputStream){
         Yaml yaml = new Yaml();
         OrmConfiguration data = yaml.loadAs(inputStream,OrmConfiguration.class);
-
         return data;
     }
 

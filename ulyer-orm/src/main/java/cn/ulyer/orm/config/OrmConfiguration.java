@@ -6,11 +6,10 @@ import cn.ulyer.orm.plugin.OrmInterceptor;
 import cn.ulyer.orm.plugin.PluginInvocationHandler;
 import cn.ulyer.orm.plugin.handler.ParameterHandler;
 import cn.ulyer.orm.plugin.handler.StatementHandler;
+import cn.ulyer.orm.result.ResultTypeHandler;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 public class OrmConfiguration {
@@ -36,33 +35,41 @@ public class OrmConfiguration {
         this.mapperLocations = mapperLocations;
     }
 
-    private final PluginConfiguration pluginConfiguration = new PluginConfiguration();
+    private final RegisterConf registerConf = new RegisterConf();
 
     public Object newExecutor(Executor target) {
-        return pluginConfiguration.proxyByType(PluginType.PREPARE, target);
+        return registerConf.proxyPluginByType(PluginType.PREPARE, target);
     }
 
     public Object newStatementHandler(StatementHandler target) {
-        return pluginConfiguration.proxyByType(PluginType.PREPARE, target);
+        return registerConf.proxyPluginByType(PluginType.PREPARE, target);
     }
 
     public Object newParameterHandler(ParameterHandler target) {
-        return pluginConfiguration.proxyByType(PluginType.PARAMETER, target);
+        return registerConf.proxyPluginByType(PluginType.PARAMETER, target);
     }
 
     public Object newResultHandler(ParameterHandler target) {
-
-        return pluginConfiguration.proxyByType(PluginType.RESULT, target);
+        return registerConf.proxyPluginByType(PluginType.RESULT, target);
     }
 
 
-    class PluginConfiguration {
+    class RegisterConf {
 
         private List<OrmInterceptor> interceptors = new ArrayList<>();
 
+        Map<Class<?>, ResultTypeHandler> typeHandlerMap = new HashMap<>();
+
         private boolean init = false;
 
-        List<OrmInterceptor> load() {
+        public List<OrmInterceptor> getInterceptors(){
+            if(!this.init){
+                this.registerPlugins();
+            }
+            return interceptors;
+        }
+
+        void registerPlugins() {
             if (!init) {
                 synchronized (this) {
                     if(!init){
@@ -82,12 +89,10 @@ public class OrmConfiguration {
                     }
                 }
             }
-
-            return interceptors;
         }
 
-        Object proxyByType(PluginType pluginType, Object target) {
-            this.load();
+        Object proxyPluginByType(PluginType pluginType, Object target) {
+            this.registerPlugins();
             for (OrmInterceptor interceptor : interceptors) {
                 if (pluginType.equals(interceptor.getType())) {
                     target = PluginInvocationHandler.newInstance(target, interceptor);

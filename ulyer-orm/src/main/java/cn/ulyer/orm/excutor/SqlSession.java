@@ -1,16 +1,19 @@
 package cn.ulyer.orm.excutor;
 
 import java.sql.Connection;
+import java.util.Map;
 
 public interface SqlSession {
 
-    <T> T selectList();
+    <T> T execute(String namespace,Map<String,Object> params);
 
-    int update();
+    <T> T selectList(String namespace, Map<String,Object> params);
 
-    int insert();
+    int update(String namespace, Map<String,Object> params);
 
-    int delete();
+    int insert(String namespace, Map<String,Object> params);
+
+    int delete(String namespace, Map<String,Object> params);
 
     Connection getConnection();
 }

@@ -1,18 +1,20 @@
 package cn.ulyer.orm.excutor;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.ulyer.orm.connection.DbConnectionUtil;
+import cn.hutool.core.lang.Assert;
 import cn.ulyer.orm.config.OrmConfiguration;
-import cn.ulyer.orm.enums.PluginType;
+import cn.ulyer.orm.connection.DatasourceWrapper;
+import cn.ulyer.orm.mapper.MapMapperProvider;
+import cn.ulyer.orm.mapper.MapperDefinition;
 import cn.ulyer.orm.mapper.MapperMethod;
-import cn.ulyer.orm.parameter.ParameterResolver;
-import cn.ulyer.orm.plugin.OrmInterceptor;
-import cn.ulyer.orm.result.ResultTypeHandler;
-import cn.ulyer.orm.tag.TagResolver;
+import cn.ulyer.orm.mapper.MapperProvider;
 import cn.ulyer.orm.utils.LogUtils;
 import lombok.Data;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,36 +23,23 @@ import java.util.Map;
 @Data
 public abstract class AbstractExecutor implements Executor {
 
+
+    private MapperProvider mapperProvider;
+
     private OrmConfiguration ormConfiguration ;
-
-    private ParameterResolver parameterResolver;
-
-    private TagResolver tagResolver;
-
-    private Map<PluginType,List<OrmInterceptor>> pluginMap;
-
-    private Map<Class<?>,ResultTypeHandler<?>> typeHandlers;
 
     public AbstractExecutor(OrmConfiguration ormConfiguration){
         this.ormConfiguration = ormConfiguration;
-        this.registerPlugins(ormConfiguration);
-        this.registerTypeHandlers(ormConfiguration);
+        this.mapperProvider = new MapMapperProvider(ormConfiguration);
     }
 
-    private void registerTypeHandlers(OrmConfiguration ormConfiguration) {
-    }
-
-    protected  void registerPlugins(OrmConfiguration ormConfiguration){
-
-    }
 
     @Override
     public <T> T execute(final MapperMethod mapperMethod, final Map<String, Object> params) {
-        Connection connection = DbConnectionUtil.getConnection();
+        Connection connection = DatasourceWrapper.getConnection();
         PreparedStatement statement = null ;
         try {
-            statement  = this.prepare(connection,mapperMethod,params);
-            this.parameterResolver.setParameter( statement, mapperMethod.getSql(),params);
+
             connection.setAutoCommit(false);
             switch (mapperMethod.getMapperSqlType()){
                 case SELECT:
@@ -66,18 +55,18 @@ public abstract class AbstractExecutor implements Executor {
             LogUtils.error(e,"mybatis excutor error :"+ ExceptionUtil.stacktraceToString(e));
             throw new RuntimeException("mybatis excutor error");
         }finally {
-            DbConnectionUtil.closeConnection(statement,connection);
+            DatasourceWrapper.closeConnection(statement,connection);
         }
     }
 
-    public abstract PreparedStatement prepare(Connection connection, MapperMethod mapperMethod, Map<String, Object> params);
 
-    public ParameterResolver getParameterResolver(){
-        return this.parameterResolver;
+
+    @Override
+    public <T> T execute(String namespace, Map<String, Object> params) {
+        MapperDefinition mapperDefinition = mapperProvider.getMapperDefinition(namespace);
+        Assert.notNull(mapperDefinition);
+        return execute(new MapperMethod(),params);
     }
-
-
-
 
     public  Object executeUpdate(Connection connection, PreparedStatement statement) throws SQLException {
         int result = statement.executeUpdate();

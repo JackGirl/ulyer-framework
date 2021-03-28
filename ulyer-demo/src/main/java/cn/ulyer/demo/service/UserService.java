@@ -1,6 +1,6 @@
 package cn.ulyer.demo.service;
 
-import cn.ulyer.orm.connection.DbConnectionUtil;
+import cn.ulyer.orm.connection.DatasourceWrapper;
 import cn.ulyer.demo.entity.User;
 
 import java.sql.*;
@@ -13,7 +13,7 @@ import java.sql.*;
 public class UserService {
 
     public Object getUser(String id) throws SQLException {
-        Connection connection = DbConnectionUtil.getConnection();
+        Connection connection = DatasourceWrapper.getConnection();
         String sql = "select * from User where id = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1,id);
@@ -24,12 +24,12 @@ public class UserService {
             String name= resultSet.getString(2);
             return new User().setId(userId).setName(name);
         }
-        DbConnectionUtil.closeConnection(statement,connection);
+        DatasourceWrapper.closeConnection(statement,connection);
         return null;
     }
 
     public int insert(String id,String name) throws SQLException {
-        Connection connection = DbConnectionUtil.getConnection();
+        Connection connection = DatasourceWrapper.getConnection();
         try{
             connection.setAutoCommit(false);
             String sql = "insert into user  (id,name) value (?,?)";
@@ -38,7 +38,7 @@ public class UserService {
             statement.setString(2,name);
             int result =  statement.executeUpdate();
             connection.commit();
-            DbConnectionUtil.closeConnection(statement,connection);
+            DatasourceWrapper.closeConnection(statement,connection);
             return result;
         }catch (Exception e){
             connection.rollback();

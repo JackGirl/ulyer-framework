@@ -1,12 +1,18 @@
 package cn.ulyer.orm.factory;
 
 import cn.ulyer.orm.config.OrmConfiguration;
+import cn.ulyer.orm.excutor.DefaultSqlSession;
 import cn.ulyer.orm.excutor.Executor;
+import cn.ulyer.orm.excutor.SimpleExecutor;
 import cn.ulyer.orm.excutor.SqlSession;
+import cn.ulyer.orm.mapper.MapMapperProvider;
 import cn.ulyer.orm.mapper.MapperProvider;
 import lombok.Data;
 
 import javax.sql.DataSource;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * @Author: yeqi
@@ -16,7 +22,7 @@ import javax.sql.DataSource;
 @Data
 public class DefaultOrmFactory implements OrmFactory{
 
-    private MapperProvider mapperProvider;
+    private MapperProvider mapperProvider ;
 
     private Executor executor ;
 
@@ -26,6 +32,8 @@ public class DefaultOrmFactory implements OrmFactory{
 
     public DefaultOrmFactory(OrmConfiguration ormConfiguration){
         this.setConfiguration(ormConfiguration);
+        this.executor = new SimpleExecutor(ormConfiguration);
+        this.mapperProvider = new MapMapperProvider(ormConfiguration);
     }
 
 
@@ -51,6 +59,17 @@ public class DefaultOrmFactory implements OrmFactory{
 
     @Override
     public SqlSession createSqlSession() {
-        return null;
+        return new DefaultSqlSession(executor,mapperProvider);
     }
+
+    @Override
+    public <T> T getMapper(Class<?> mapper) {
+        return (T) MapperInvocationHandler.instance(this,mapper);
+    }
+
+
+
+
+
+
 }

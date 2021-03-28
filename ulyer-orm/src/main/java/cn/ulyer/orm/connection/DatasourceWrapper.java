@@ -2,6 +2,7 @@ package cn.ulyer.orm.connection;
 
 import lombok.Data;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,8 +15,9 @@ import java.util.Properties;
  * @Date: Create in 19:49 2021/3/20
  */
 @Data
-public class DbConnectionUtil {
+public class DatasourceWrapper {
 
+    private DataSource dataSource;
 
     static Properties   jdbcProperties = new Properties();
 
@@ -29,7 +31,7 @@ public class DbConnectionUtil {
 
     static {
         try {
-            jdbcProperties.load(DbConnectionUtil.class.getResourceAsStream("/jdbc.properties"));
+            jdbcProperties.load(DatasourceWrapper.class.getResourceAsStream("/jdbc.properties"));
             url = jdbcProperties.getProperty("jdbc.url");
             username = jdbcProperties.getProperty("jdbc.username");
             password = jdbcProperties.getProperty("jdbc.password");
