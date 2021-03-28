@@ -5,6 +5,7 @@ import java.util.Map;
 
 public interface SqlSession {
 
+    <T> T execute(String namespace,Object[] params);
 
     <T> T selectList(String namespace, Object ...params);
 

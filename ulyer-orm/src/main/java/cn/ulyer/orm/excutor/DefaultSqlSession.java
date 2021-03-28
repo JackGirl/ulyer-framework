@@ -8,9 +8,6 @@ import cn.ulyer.orm.mapper.handler.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.List;
-import java.util.Map;
 
 public class DefaultSqlSession implements SqlSession{
 
@@ -20,18 +17,20 @@ public class DefaultSqlSession implements SqlSession{
 
     private OrmConfiguration ormConfiguration;
 
-    public DefaultSqlSession(Executor executor, MapperProvider mapperProvider,OrmConfiguration ormConfiguration){
+    private Connection connection;
+
+    public DefaultSqlSession(Executor executor, MapperProvider mapperProvider,OrmConfiguration ormConfiguration,Connection connection){
         this.executor = executor;
         this.mapperProvider = mapperProvider;
         this.ormConfiguration = ormConfiguration;
+        this.connection = connection;
     }
 
 
-
     @Override
-    public <T> T selectList(String namespace,  Object ...params) {
+    public <T> T execute(String namespace, Object[] params) {
         MapperWrapper mapperWrapper = mapperProvider.getMapperWrapper(namespace,params);
-        StatementHandler statementHandler = ormConfiguration.newStatementHandler(new PrepareStatementHandler());
+        StatementHandler statementHandler = ormConfiguration.newStatementHandler(new PrepareStatementHandler(connection));
         PreparedStatement statement = statementHandler.createStatement(mapperWrapper);
         mapperWrapper.setStatement(statement);
         ParameterHandler parameterHandler = ormConfiguration.newParameterHandler(new RegexParameterResolver());
@@ -39,29 +38,35 @@ public class DefaultSqlSession implements SqlSession{
         Executor executor = ormConfiguration.newExecutor(this.executor);
         ResultSet resultMap =  executor.execute(mapperWrapper);
         ResultTypeHandler resultTypeHandler = ormConfiguration.newResultHandler(new DefaultTypeHandler());
-
         return null;
+    }
+
+    @Override
+    public <T> T selectList(String namespace,  Object ...params) {
+        return this.execute(namespace,new Object[]{params});
     }
 
     @Override
     public int update(String namespace,  Object ...params) {
-        return 0;
+        return this.execute(namespace,new Object[]{params});
     }
 
     @Override
     public int insert(String namespace,  Object ...params) {
-        return 0;
+        return this.execute(namespace,new Object[]{params});
     }
 
     @Override
     public int delete(String namespace, Object ...params) {
-        return 0;
+        return this.execute(namespace,new Object[]{params});
     }
 
     @Override
     public Connection getConnection() {
-        return null;
+        return connection;
     }
+
+
 
 
 

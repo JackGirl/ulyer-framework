@@ -28,7 +28,7 @@ public class ParameterObject {
         this.parameterMappings = parameterMappings;
     }
 
-    public static ParameterObject newParameter(MapperMethod mapperMethod,Object... parameter){
+    public static ParameterObject newParameter(MapperMethod mapperMethod,Object[] parameter){
         if(parameter==null){
             return new ParameterObject(null,Object.class,mapperMethod.getParameterMappings());
         }

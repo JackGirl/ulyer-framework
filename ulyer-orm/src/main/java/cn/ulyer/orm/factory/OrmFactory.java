@@ -5,6 +5,7 @@ import cn.ulyer.orm.excutor.Executor;
 import cn.ulyer.orm.excutor.SqlSession;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 public interface OrmFactory {
 
@@ -16,7 +17,7 @@ public interface OrmFactory {
 
     OrmConfiguration getConfiguration();
 
-    SqlSession createSqlSession();
+    SqlSession createSqlSession() throws SQLException;
 
     <T> T getMapper(Class<?> mapper);
 

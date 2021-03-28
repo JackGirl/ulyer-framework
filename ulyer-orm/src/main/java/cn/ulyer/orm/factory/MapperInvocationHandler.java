@@ -31,7 +31,7 @@ public class MapperInvocationHandler  implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         SqlSession sqlSession = ormFactory.createSqlSession();
-        Object result = sqlSession.execute(mapperClass.getName()+"."+method.getName(),new HashMap<>());
+        Object result = sqlSession.execute(mapperClass.getName()+"."+method.getName(),args);
         return result;
     }
 

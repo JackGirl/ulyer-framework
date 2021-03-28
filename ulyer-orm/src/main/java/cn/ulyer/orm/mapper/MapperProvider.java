@@ -17,5 +17,5 @@ public interface MapperProvider {
     MapperDefinition getMapperDefinition(String namespace);
 
 
-    MapperWrapper getMapperWrapper(String namespace,Object...params);
+    MapperWrapper getMapperWrapper(String namespace,Object[] params);
 }

@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.sql.SQLException;
 
 /**
  * @Author: yeqi
@@ -58,8 +59,8 @@ public class DefaultOrmFactory implements OrmFactory{
     }
 
     @Override
-    public SqlSession createSqlSession() {
-        return new DefaultSqlSession(executor,mapperProvider,ormConfiguration);
+    public SqlSession createSqlSession() throws SQLException {
+        return new DefaultSqlSession(executor,mapperProvider,ormConfiguration,dataSource.getConnection());
     }
 
     @Override
