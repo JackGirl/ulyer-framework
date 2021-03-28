@@ -3,7 +3,6 @@ package cn.ulyer.orm.parameter;
 import cn.ulyer.orm.utils.LogUtils;
 
 import java.sql.PreparedStatement;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,14 +17,13 @@ public class RegexParameterResolver implements ParameterResolver {
 
 
     @Override
-    public void setParameter(PreparedStatement preparedStatement, String tagSql, Map<String, Object> params) {
+    public void setParameter(PreparedStatement preparedStatement, String tagSql, ParameterObject parameterObject) {
         try {
             Matcher matcher = pattern.matcher(tagSql);
             int index = 1;
             while (matcher.find()){
                 String parameterName = matcher.group();
                 String paramName = parameterName.replaceAll("[{}]","");
-                preparedStatement.setString(index, (String) params.get(paramName));
             }
 
         }catch (Exception e){

@@ -1,8 +1,6 @@
 package cn.ulyer.orm.parameter;
 
 import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.util.Map;
 
 /**
  * @Author: yeqi
@@ -11,7 +9,7 @@ import java.util.Map;
  */
 public interface ParameterResolver {
 
-    void setParameter(PreparedStatement preparedStatement, String tagSql, Map<String,Object> params);
+    void setParameter(PreparedStatement preparedStatement, String tagSql, ParameterObject parameterObject);
 
 
 }

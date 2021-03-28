@@ -8,6 +8,7 @@ import cn.ulyer.orm.mapper.MapMapperProvider;
 import cn.ulyer.orm.mapper.MapperDefinition;
 import cn.ulyer.orm.mapper.MapperMethod;
 import cn.ulyer.orm.mapper.MapperProvider;
+import cn.ulyer.orm.parameter.ParameterObject;
 import cn.ulyer.orm.utils.LogUtils;
 import lombok.Data;
 
@@ -35,7 +36,7 @@ public abstract class AbstractExecutor implements Executor {
 
 
     @Override
-    public <T> T execute(final MapperMethod mapperMethod, final Map<String, Object> params) {
+    public <T> T execute(final MapperMethod mapperMethod, ParameterObject parameterObject) {
         Connection connection = DatasourceWrapper.getConnection();
         PreparedStatement statement = null ;
         try {
@@ -62,10 +63,10 @@ public abstract class AbstractExecutor implements Executor {
 
 
     @Override
-    public <T> T execute(String namespace, Map<String, Object> params) {
+    public <T> T execute(String namespace, ParameterObject parameterObject) {
         MapperDefinition mapperDefinition = mapperProvider.getMapperDefinition(namespace);
         Assert.notNull(mapperDefinition);
-        return execute(new MapperMethod(),params);
+        return execute(new MapperMethod(),parameterObject);
     }
 
     public  Object executeUpdate(Connection connection, PreparedStatement statement) throws SQLException {

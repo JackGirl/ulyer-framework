@@ -1,6 +1,7 @@
 package cn.ulyer.orm.excutor;
 
 import cn.ulyer.orm.mapper.MapperMethod;
+import cn.ulyer.orm.parameter.ParameterObject;
 
 import java.util.Map;
 
@@ -12,9 +13,9 @@ import java.util.Map;
 public interface Executor {
 
 
-    <T> T execute(MapperMethod mapperMethod, Map<String,Object> params) ;
+    <T> T execute(MapperMethod mapperMethod,ParameterObject parameterObject) ;
 
-    <T> T execute(String namespace,Map<String,Object> params);
+    <T> T execute(String namespace, ParameterObject parameterObject);
 
 
 }
