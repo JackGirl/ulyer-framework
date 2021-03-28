@@ -38,9 +38,9 @@ public class ParameterObject {
         }
         Map<String, Object> value = new HashMap<>(5);
         for (int i = 0; i < parameter.length; i++) {
-            value.put("arg" + i, parameter);
+            value.put("arg" + i, parameter[i]);
         }
-        return new ParameterObject(parameter, Map.class, mapperMethod.getParameterMappings());
+        return new ParameterObject(value, Map.class, mapperMethod.getParameterMappings());
     }
 
     public <T> T getParameterByName(String name) {

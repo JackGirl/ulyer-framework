@@ -16,8 +16,8 @@ public class ParamObjectTest {
         u.setId("1");u.setName("231");
         Map<String,Object> dataMap = new HashMap<>();
         dataMap.put("user",u);
-        ParameterObject parameterObject = ParameterObject.newParameter(new MapperMethod(),new Object[]{dataMap});
-        System.out.println((String) parameterObject.getParameterByName("user.name"));
+        ParameterObject parameterObject = ParameterObject.newParameter(new MapperMethod(),new Object[]{dataMap,u});
+        System.out.println((String) parameterObject.getParameterByName("arg1.name"));
     }
 
 }
