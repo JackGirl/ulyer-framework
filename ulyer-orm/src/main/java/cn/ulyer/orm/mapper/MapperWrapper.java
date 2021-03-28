@@ -1,9 +1,9 @@
 package cn.ulyer.orm.mapper;
 
-import cn.ulyer.orm.parameter.ParameterObject;
+import cn.ulyer.orm.mapper.parameter.ParameterObject;
 import lombok.Data;
 
-import java.util.Map;
+import java.sql.PreparedStatement;
 
 @Data
 public class MapperWrapper {
@@ -15,5 +15,8 @@ public class MapperWrapper {
     private MapperMethod mapperMethod;
 
     private ParameterObject parameterObject;
+
+
+    private PreparedStatement statement;
 
 }

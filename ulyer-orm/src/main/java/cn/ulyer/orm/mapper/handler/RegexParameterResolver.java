@@ -1,11 +1,7 @@
-package cn.ulyer.orm.parameter;
+package cn.ulyer.orm.mapper.handler;
 
 import cn.ulyer.orm.mapper.MapperWrapper;
-import cn.ulyer.orm.plugin.handler.ParameterHandler;
-import cn.ulyer.orm.utils.LogUtils;
 
-import java.sql.PreparedStatement;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -18,9 +14,8 @@ public class RegexParameterResolver implements ParameterHandler {
     Pattern pattern = Pattern.compile("\\{(.+?)\\}");
 
 
-
     @Override
-    public void setParameter(PreparedStatement preparedStatement, MapperWrapper mapperWrapper) {
+    public void setParameter(MapperWrapper mapperWrapper) {
 
     }
 }

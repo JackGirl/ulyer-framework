@@ -7,10 +7,7 @@ import cn.ulyer.orm.mapper.MapperWrapper;
 import cn.ulyer.orm.utils.LogUtils;
 import lombok.Data;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,25 +28,21 @@ public abstract class AbstractExecutor implements Executor {
     @Override
     public <T> T execute(final MapperWrapper mapperWrapper) {
         Connection connection = DatasourceWrapper.getConnection();
-        PreparedStatement statement = null ;
         try {
-
             connection.setAutoCommit(false);
             switch (mapperWrapper.getMapperMethod().getMapperSqlType()){
                 case SELECT:
-                    return executeQuery(connection,statement);
+                    return executeQuery(mapperWrapper);
                 case DELETE:
                 case INSERT:
                 case UPDATE:
-                    return (T) executeUpdate(connection,statement);
+                    return (T) executeUpdate(mapperWrapper);
                 default:
                     throw  new IllegalStateException("no  excutor type for this mapperSql"+ mapperWrapper.getMapperMethod().getId());
             }
         } catch (Exception e) {
             LogUtils.error(e,"mybatis excutor error :"+ ExceptionUtil.stacktraceToString(e));
             throw new RuntimeException("mybatis excutor error");
-        }finally {
-            DatasourceWrapper.closeConnection(statement,connection);
         }
     }
 
@@ -57,16 +50,14 @@ public abstract class AbstractExecutor implements Executor {
 
 
 
-    public  Object executeUpdate(Connection connection, PreparedStatement statement) throws SQLException {
-        int result = statement.executeUpdate();
-        connection.commit();
+    public  Object executeUpdate(MapperWrapper mapperWrapper) throws SQLException {
+        int result = mapperWrapper.getStatement().executeUpdate();
         return result;
     }
 
-    public <T> T executeQuery(Connection connection,PreparedStatement statement) throws SQLException{
+    public <T> T executeQuery(MapperWrapper mapperWrapper) throws SQLException{
         ResultSet resultSet ;
-        connection.setReadOnly(true);
-        resultSet = statement.executeQuery();
+        resultSet = mapperWrapper.getStatement().executeQuery();
         int columnCount = resultSet.getMetaData().getColumnCount();
         List<Object> list = new ArrayList<>();
         while (resultSet.next()){

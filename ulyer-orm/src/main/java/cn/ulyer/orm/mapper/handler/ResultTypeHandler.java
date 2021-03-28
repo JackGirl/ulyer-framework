@@ -1,4 +1,4 @@
-package cn.ulyer.orm.result;
+package cn.ulyer.orm.mapper.handler;
 
 import java.sql.ResultSet;
 

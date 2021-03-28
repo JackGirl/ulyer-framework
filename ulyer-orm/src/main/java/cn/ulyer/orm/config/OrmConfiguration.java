@@ -2,14 +2,12 @@ package cn.ulyer.orm.config;
 
 import cn.ulyer.orm.enums.PluginType;
 import cn.ulyer.orm.excutor.Executor;
-import cn.ulyer.orm.mapper.MapperDefinition;
-import cn.ulyer.orm.mapper.MapperProvider;
-import cn.ulyer.orm.mapper.MapperWrapper;
+import cn.ulyer.orm.mapper.handler.PrepareStatementHandler;
 import cn.ulyer.orm.plugin.OrmInterceptor;
 import cn.ulyer.orm.plugin.PluginInvocationHandler;
-import cn.ulyer.orm.plugin.handler.ParameterHandler;
-import cn.ulyer.orm.plugin.handler.StatementHandler;
-import cn.ulyer.orm.result.ResultTypeHandler;
+import cn.ulyer.orm.mapper.handler.ParameterHandler;
+import cn.ulyer.orm.mapper.handler.StatementHandler;
+import cn.ulyer.orm.mapper.handler.ResultTypeHandler;
 import lombok.Data;
 
 import java.util.*;
@@ -42,20 +40,20 @@ public class OrmConfiguration {
 
 
 
-    public Object newExecutor(Executor target) {
-        return registerConf.proxyPluginByType(PluginType.PREPARE, target);
+    public Executor newExecutor(Executor target) {
+        return (Executor) registerConf.proxyPluginByType(PluginType.PREPARE, target);
     }
 
-    public Object newStatementHandler(StatementHandler target) {
-        return registerConf.proxyPluginByType(PluginType.PREPARE, target);
+    public PrepareStatementHandler newStatementHandler(StatementHandler target) {
+        return (PrepareStatementHandler) registerConf.proxyPluginByType(PluginType.PREPARE, target);
     }
 
-    public Object newParameterHandler(ParameterHandler target) {
-        return registerConf.proxyPluginByType(PluginType.PARAMETER, target);
+    public ParameterHandler newParameterHandler(ParameterHandler target) {
+        return (ParameterHandler) registerConf.proxyPluginByType(PluginType.PARAMETER, target);
     }
 
-    public Object newResultHandler(ParameterHandler target) {
-        return registerConf.proxyPluginByType(PluginType.RESULT, target);
+    public ResultTypeHandler newResultHandler(ResultTypeHandler target) {
+        return (ResultTypeHandler) registerConf.proxyPluginByType(PluginType.RESULT, target);
     }
 
 

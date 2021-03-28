@@ -1,4 +1,4 @@
-package cn.ulyer.orm.parameter;
+package cn.ulyer.orm.mapper.parameter;
 
 import cn.hutool.core.lang.Assert;
 import cn.ulyer.orm.mapper.MapperMethod;

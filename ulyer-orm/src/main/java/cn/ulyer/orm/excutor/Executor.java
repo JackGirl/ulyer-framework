@@ -1,10 +1,10 @@
 package cn.ulyer.orm.excutor;
 
-import cn.ulyer.orm.mapper.MapperMethod;
-import cn.ulyer.orm.mapper.MapperWrapper;
-import cn.ulyer.orm.parameter.ParameterObject;
 
-import java.util.Map;
+
+import cn.ulyer.orm.mapper.MapperWrapper;
+
+import java.sql.Statement;
 
 /**
  * @Author: yeqi

@@ -2,9 +2,10 @@ package cn.ulyer.orm.mapper;
 
 import cn.hutool.core.lang.Assert;
 import cn.ulyer.orm.config.OrmConfiguration;
-import cn.ulyer.orm.parameter.ParameterObject;
+import cn.ulyer.orm.mapper.parameter.ParameterObject;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,11 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Data
 public class MapMapperProvider  implements MapperProvider{
 
-    List<MapperScanner> scanners ;
+    List<MapperScanner> scanners  = new ArrayList<>();
 
     Map<String,MapperDefinition> mappers = new ConcurrentHashMap<>(100);
 
     public MapMapperProvider(OrmConfiguration ormConfiguration){
+        scanners.add(new SimpleMapperScanner());
         this.setScanners(scanners);
         for (MapperScanner scanner : scanners) {
             mappers.putAll(scanner.scanner(ormConfiguration));
