@@ -2,6 +2,9 @@ package cn.ulyer.orm.config;
 
 import cn.ulyer.orm.enums.PluginType;
 import cn.ulyer.orm.excutor.Executor;
+import cn.ulyer.orm.mapper.MapperDefinition;
+import cn.ulyer.orm.mapper.MapperProvider;
+import cn.ulyer.orm.mapper.MapperWrapper;
 import cn.ulyer.orm.plugin.OrmInterceptor;
 import cn.ulyer.orm.plugin.PluginInvocationHandler;
 import cn.ulyer.orm.plugin.handler.ParameterHandler;
@@ -25,7 +28,9 @@ public class OrmConfiguration {
 
     private Set<String> pluginClasses;
 
-    private List<OrmInterceptor> ormInterceptors;
+
+    private final RegisterConf registerConf = new RegisterConf();
+
 
     public void setBasePackages(String... packages) {
         this.basePackages = packages;
@@ -35,7 +40,7 @@ public class OrmConfiguration {
         this.mapperLocations = mapperLocations;
     }
 
-    private final RegisterConf registerConf = new RegisterConf();
+
 
     public Object newExecutor(Executor target) {
         return registerConf.proxyPluginByType(PluginType.PREPARE, target);

@@ -1,8 +1,8 @@
 package cn.ulyer.orm.excutor;
 
-import cn.hutool.core.lang.Assert;
-import cn.ulyer.orm.mapper.MapperDefinition;
+import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.MapperProvider;
+import cn.ulyer.orm.mapper.MapperWrapper;
 
 import java.sql.Connection;
 import java.util.Map;
@@ -13,9 +13,12 @@ public class DefaultSqlSession implements SqlSession{
 
     private MapperProvider mapperProvider;
 
-    public DefaultSqlSession(Executor executor, MapperProvider mapperProvider){
+    private OrmConfiguration ormConfiguration;
+
+    public DefaultSqlSession(Executor executor, MapperProvider mapperProvider,OrmConfiguration ormConfiguration){
         this.executor = executor;
         this.mapperProvider = mapperProvider;
+        this.ormConfiguration = ormConfiguration;
     }
 
 
@@ -26,8 +29,7 @@ public class DefaultSqlSession implements SqlSession{
 
     @Override
     public <T> T selectList(String namespace, Map<String,Object> params) {
-        MapperDefinition mapperDefinition = mapperProvider.getMapperDefinition(getMapperNameSpace(namespace));
-        Assert.notNull(mapperDefinition,"no mapperDefinition for namespace :"+namespace);
+        MapperWrapper mapperWrapper = mapperProvider.getMapperWrapper(namespace);
 
         return null;
     }
@@ -52,12 +54,8 @@ public class DefaultSqlSession implements SqlSession{
         return null;
     }
 
-    private String getMapperNameSpace(String space){
-        return space.substring(0,space.lastIndexOf("."));
-    }
 
-    private String getMapperMethodId(String space){
-        return space.substring(space.lastIndexOf(".")+1);
-    }
+
+
 
 }

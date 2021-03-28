@@ -1,5 +1,6 @@
 package cn.ulyer.orm.mapper;
 
+import cn.ulyer.orm.parameter.ParameterObject;
 import lombok.Data;
 
 import java.util.Map;
@@ -13,6 +14,6 @@ public class MapperWrapper {
 
     private MapperMethod mapperMethod;
 
-    private Map<String,Object> parameters;
+    private ParameterObject parameterObject;
 
 }

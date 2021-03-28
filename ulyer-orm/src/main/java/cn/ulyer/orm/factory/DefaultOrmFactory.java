@@ -59,7 +59,7 @@ public class DefaultOrmFactory implements OrmFactory{
 
     @Override
     public SqlSession createSqlSession() {
-        return new DefaultSqlSession(executor,mapperProvider);
+        return new DefaultSqlSession(executor,mapperProvider,ormConfiguration);
     }
 
     @Override

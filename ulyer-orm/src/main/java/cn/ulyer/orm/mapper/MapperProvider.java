@@ -5,10 +5,9 @@ public interface MapperProvider {
     /**
      * 获取mapperMethod
      * @param namespace
-     * @param methodId
      * @return
      */
-    MapperMethod getMapperMethod(String namespace,String methodId);
+    MapperMethod getMapperMethod(String namespace);
 
     /**
      * 获取mapper定义 按命名空间唯一键
@@ -17,4 +16,6 @@ public interface MapperProvider {
      */
     MapperDefinition getMapperDefinition(String namespace);
 
+
+    MapperWrapper getMapperWrapper(String namespace,Object...params);
 }

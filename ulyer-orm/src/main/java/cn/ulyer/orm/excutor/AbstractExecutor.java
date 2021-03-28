@@ -1,14 +1,9 @@
 package cn.ulyer.orm.excutor;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.core.lang.Assert;
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.connection.DatasourceWrapper;
-import cn.ulyer.orm.mapper.MapMapperProvider;
-import cn.ulyer.orm.mapper.MapperDefinition;
-import cn.ulyer.orm.mapper.MapperMethod;
-import cn.ulyer.orm.mapper.MapperProvider;
-import cn.ulyer.orm.parameter.ParameterObject;
+import cn.ulyer.orm.mapper.MapperWrapper;
 import cn.ulyer.orm.utils.LogUtils;
 import lombok.Data;
 
@@ -25,24 +20,22 @@ import java.util.Map;
 public abstract class AbstractExecutor implements Executor {
 
 
-    private MapperProvider mapperProvider;
 
     private OrmConfiguration ormConfiguration ;
 
     public AbstractExecutor(OrmConfiguration ormConfiguration){
         this.ormConfiguration = ormConfiguration;
-        this.mapperProvider = new MapMapperProvider(ormConfiguration);
     }
 
 
     @Override
-    public <T> T execute(final MapperMethod mapperMethod, ParameterObject parameterObject) {
+    public <T> T execute(final MapperWrapper mapperWrapper) {
         Connection connection = DatasourceWrapper.getConnection();
         PreparedStatement statement = null ;
         try {
 
             connection.setAutoCommit(false);
-            switch (mapperMethod.getMapperSqlType()){
+            switch (mapperWrapper.getMapperMethod().getMapperSqlType()){
                 case SELECT:
                     return executeQuery(connection,statement);
                 case DELETE:
@@ -50,7 +43,7 @@ public abstract class AbstractExecutor implements Executor {
                 case UPDATE:
                     return (T) executeUpdate(connection,statement);
                 default:
-                    throw  new IllegalStateException("no  excutor type for this mapperSql"+ mapperMethod.getId());
+                    throw  new IllegalStateException("no  excutor type for this mapperSql"+ mapperWrapper.getMapperMethod().getId());
             }
         } catch (Exception e) {
             LogUtils.error(e,"mybatis excutor error :"+ ExceptionUtil.stacktraceToString(e));
@@ -62,12 +55,7 @@ public abstract class AbstractExecutor implements Executor {
 
 
 
-    @Override
-    public <T> T execute(String namespace, ParameterObject parameterObject) {
-        MapperDefinition mapperDefinition = mapperProvider.getMapperDefinition(namespace);
-        Assert.notNull(mapperDefinition);
-        return execute(new MapperMethod(),parameterObject);
-    }
+
 
     public  Object executeUpdate(Connection connection, PreparedStatement statement) throws SQLException {
         int result = statement.executeUpdate();
