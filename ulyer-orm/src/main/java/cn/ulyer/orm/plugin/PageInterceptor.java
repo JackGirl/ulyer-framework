@@ -3,7 +3,9 @@ package cn.ulyer.orm.plugin;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.ulyer.orm.enums.PluginType;
 import cn.ulyer.orm.mapper.MapperMethod;
+import cn.ulyer.orm.mapper.MapperWrapper;
 import cn.ulyer.orm.mapper.ParameterMapping;
+import cn.ulyer.orm.mapper.parameter.ParameterObject;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -29,9 +31,9 @@ public class PageInterceptor implements OrmInterceptor {
 
     @Override
     public Object plugin(Invocation invocation) throws InvocationTargetException, IllegalAccessException {
-        Connection connection = (Connection) invocation.getArgs()[0];
-        MapperMethod mapperMethod = (MapperMethod) invocation.getArgs()[1];
-        Map<String,Object> params = (Map<String, Object>) invocation.getArgs()[2];
+        MapperWrapper mapperWrapper = (MapperWrapper) invocation.getArgs()[0];
+        MapperMethod mapperMethod = (MapperMethod) mapperWrapper.getMapperMethod();
+        ParameterObject parameterObject = mapperWrapper.getParameterObject();
         List<ParameterMapping> parameterMappings = mapperMethod.getParameterMappings();
         if(CollectionUtil.isEmpty(parameterMappings)){
             //执行下一个拦截器
@@ -42,7 +44,7 @@ public class PageInterceptor implements OrmInterceptor {
             ParameterMapping parameterMapping = parameterMappings.get(i);
             Class<?> paramClass = parameterMapping.getType();
             if(Page.class.isAssignableFrom(paramClass)){
-                page = (Page) params.get(parameterMapping.getName());
+                page =  parameterObject.getParameterByName(parameterMapping.getName());
                 break;
             }
         }

@@ -4,6 +4,7 @@ import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.MapperProvider;
 import cn.ulyer.orm.mapper.MapperWrapper;
 import cn.ulyer.orm.mapper.handler.*;
+import lombok.SneakyThrows;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,8 +28,16 @@ public class DefaultSqlSession implements SqlSession{
     }
 
 
+    /**
+     * 真正的执行方法  包括执行周期也在这里
+     * @param namespace
+     * @param params
+     * @param <T>
+     * @return
+     */
+    @SneakyThrows
     @Override
-    public <T> T execute(String namespace, Object[] params) {
+    public <T> T execute(String namespace, Object... params) {
         MapperWrapper mapperWrapper = mapperProvider.getMapperWrapper(namespace,params);
         StatementHandler statementHandler = ormConfiguration.newStatementHandler(new PrepareStatementHandler(connection));
         PreparedStatement statement = statementHandler.createStatement(mapperWrapper);
@@ -37,7 +46,7 @@ public class DefaultSqlSession implements SqlSession{
         parameterHandler.setParameter(mapperWrapper);
         Executor executor = ormConfiguration.newExecutor(this.executor);
         ResultSet resultMap =  executor.execute(mapperWrapper);
-        ResultTypeHandler resultTypeHandler = ormConfiguration.newResultHandler(new DefaultTypeHandler());
+        TypeHandler typeHandler = ormConfiguration.newResultHandler(new DefaultTypeHandler());
         return null;
     }
 

@@ -25,7 +25,7 @@ public class MapperInvocationHandler  implements InvocationHandler {
         if(!mapperClass.isInterface()){
             throw new RuntimeException("mapper is not interface cannot proxy class:"+mapperClass.getName());
         }
-        return Proxy.newProxyInstance(factory.getClass().getClassLoader(),mapperClass.getInterfaces(),new MapperInvocationHandler(factory,mapperClass));
+        return Proxy.newProxyInstance(factory.getClass().getClassLoader(),new Class[]{mapperClass},new MapperInvocationHandler(factory,mapperClass));
     }
 
     @Override
@@ -34,6 +34,7 @@ public class MapperInvocationHandler  implements InvocationHandler {
         Object result = sqlSession.execute(mapperClass.getName()+"."+method.getName(),args);
         return result;
     }
+
 
 
 }

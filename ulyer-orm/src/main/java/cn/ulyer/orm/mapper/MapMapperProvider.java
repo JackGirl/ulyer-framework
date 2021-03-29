@@ -40,7 +40,7 @@ public class MapMapperProvider  implements MapperProvider{
     }
 
     @Override
-    public MapperWrapper getMapperWrapper(String namespace,Object[] params) {
+    public MapperWrapper getMapperWrapper(String namespace,Object...params) {
         MapperDefinition mapperDefinition = getMapperDefinition(getMapperNameSpace(namespace));
         Assert.notNull(mapperDefinition,"no mapperDefinition for space："+namespace);
         MapperMethod mapperMethod = mapperDefinition.getMapperMethodMap().get(namespace);

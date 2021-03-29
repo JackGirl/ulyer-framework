@@ -8,6 +8,7 @@ import cn.ulyer.orm.excutor.SqlSession;
 import cn.ulyer.orm.mapper.MapMapperProvider;
 import cn.ulyer.orm.mapper.MapperProvider;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationHandler;
@@ -59,12 +60,13 @@ public class DefaultOrmFactory implements OrmFactory{
     }
 
     @Override
-    public SqlSession createSqlSession() throws SQLException {
+    @SneakyThrows
+    public SqlSession createSqlSession() {
         return new DefaultSqlSession(executor,mapperProvider,ormConfiguration,dataSource.getConnection());
     }
 
     @Override
-    public <T> T getMapper(Class<?> mapper) {
+    public <T> T getMapper(Class<T> mapper) {
         return (T) MapperInvocationHandler.instance(this,mapper);
     }
 

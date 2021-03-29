@@ -2,12 +2,9 @@ package cn.ulyer.orm.config;
 
 import cn.ulyer.orm.enums.PluginType;
 import cn.ulyer.orm.excutor.Executor;
-import cn.ulyer.orm.mapper.handler.PrepareStatementHandler;
+import cn.ulyer.orm.mapper.handler.*;
 import cn.ulyer.orm.plugin.OrmInterceptor;
 import cn.ulyer.orm.plugin.PluginInvocationHandler;
-import cn.ulyer.orm.mapper.handler.ParameterHandler;
-import cn.ulyer.orm.mapper.handler.StatementHandler;
-import cn.ulyer.orm.mapper.handler.ResultTypeHandler;
 import lombok.Data;
 
 import java.util.*;
@@ -44,24 +41,25 @@ public class OrmConfiguration {
         return (Executor) registerConf.proxyPluginByType(PluginType.PREPARE, target);
     }
 
-    public PrepareStatementHandler newStatementHandler(StatementHandler target) {
-        return (PrepareStatementHandler) registerConf.proxyPluginByType(PluginType.PREPARE, target);
+    public StatementHandler newStatementHandler(StatementHandler target) {
+        return (StatementHandler) registerConf.proxyPluginByType(PluginType.PREPARE, target);
     }
 
     public ParameterHandler newParameterHandler(ParameterHandler target) {
         return (ParameterHandler) registerConf.proxyPluginByType(PluginType.PARAMETER, target);
     }
 
-    public ResultTypeHandler newResultHandler(ResultTypeHandler target) {
-        return (ResultTypeHandler) registerConf.proxyPluginByType(PluginType.RESULT, target);
+    public TypeHandler newResultHandler(TypeHandler target) {
+        return (TypeHandler) registerConf.proxyPluginByType(PluginType.RESULT, target);
     }
 
 
-    class RegisterConf {
+    @Data
+     class RegisterConf {
 
         private List<OrmInterceptor> interceptors = new ArrayList<>();
 
-        Map<Class<?>, ResultTypeHandler> typeHandlerMap = new HashMap<>();
+        Map<Class<?>, TypeHandler> typeHandlerMap = new HashMap<>();
 
         private boolean init = false;
 
@@ -70,6 +68,18 @@ public class OrmConfiguration {
                 this.registerPlugins();
             }
             return interceptors;
+        }
+
+        public RegisterConf(){
+            this.registerTypeHandlers();
+        }
+
+        private void registerTypeHandlers() {
+            //typeHandlerMap.put()
+            typeHandlerMap.put(String.class,new StringTypeHandler());
+            typeHandlerMap.put(Integer.class,new IntegerTypeHandler());
+            typeHandlerMap.put(int.class,new IntegerTypeHandler());
+            typeHandlerMap.put(List.class,new ListTypeHandler());
         }
 
         void registerPlugins() {

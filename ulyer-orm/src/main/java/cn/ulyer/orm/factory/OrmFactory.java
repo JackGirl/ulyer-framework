@@ -17,8 +17,8 @@ public interface OrmFactory {
 
     OrmConfiguration getConfiguration();
 
-    SqlSession createSqlSession() throws SQLException;
+    SqlSession createSqlSession() ;
 
-    <T> T getMapper(Class<?> mapper);
+    <T> T getMapper(Class<T> mapper);
 
 }

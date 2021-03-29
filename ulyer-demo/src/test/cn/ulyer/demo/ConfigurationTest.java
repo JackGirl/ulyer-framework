@@ -8,6 +8,7 @@ import cn.ulyer.orm.excutor.AbstractExecutor;
 import cn.ulyer.orm.excutor.Executor;
 import cn.ulyer.orm.excutor.SimpleExecutor;
 import cn.ulyer.orm.mapper.MapperMethod;
+import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -26,6 +27,7 @@ public class ConfigurationTest {
         Map<String,Object> params = MapUtil.createMap(HashMap.class);
         params.put("id","1");
         Executor proxy = (Executor) ormConfiguration.newExecutor(executor);
+        System.out.println(JSON.toJSONString(ormConfiguration.getRegisterConf(),true));
 
     }
 

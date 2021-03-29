@@ -29,7 +29,7 @@ public class ParameterObject {
         this.parameterMappings = parameterMappings;
     }
 
-    public static ParameterObject newParameter(MapperMethod mapperMethod, Object[] parameter) {
+    public static ParameterObject newParameter(MapperMethod mapperMethod, Object... parameter) {
         if (parameter == null) {
             return new ParameterObject(null, Object.class, mapperMethod.getParameterMappings());
         }
@@ -77,6 +77,9 @@ public class ParameterObject {
         }
         if (Map.class.isAssignableFrom(valClass)) {
             return (T) ((Map) target).get(name);
+        }
+        if(ParameterObject.class.isAssignableFrom(valClass)){
+            return (T)getDeepParameterByName(((ParameterObject)target).getValue(),name);
         }
         Object returnVal = null;
         try {

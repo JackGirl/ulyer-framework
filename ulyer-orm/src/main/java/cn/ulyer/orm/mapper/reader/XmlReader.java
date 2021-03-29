@@ -72,21 +72,21 @@ public class XmlReader implements OrmFileReader {
 
     public MapperMethod updateMapper(Element root,Element element) throws ClassNotFoundException {
         MapperMethod mapperMethod = new MapperMethod();
-        mapperMethod.setMapperSqlType(MapperSqlType.DELETE);
+        mapperMethod.setMapperSqlType(MapperSqlType.UPDATE);
         return get(mapperMethod,root,element);
     }
 
 
     public MapperMethod insertMapper(Element root,Element element) throws ClassNotFoundException {
         MapperMethod mapperMethod = new MapperMethod();
-        mapperMethod.setMapperSqlType(MapperSqlType.DELETE);
+        mapperMethod.setMapperSqlType(MapperSqlType.INSERT);
         return get(mapperMethod,root,element);
     }
 
 
     public MapperMethod selectMapper(Element root,Element element) throws ClassNotFoundException {
         MapperMethod mapperMethod = new MapperMethod();
-        mapperMethod.setMapperSqlType(MapperSqlType.DELETE);
+        mapperMethod.setMapperSqlType(MapperSqlType.SELECT);
         return get(mapperMethod,root,element);
     }
 

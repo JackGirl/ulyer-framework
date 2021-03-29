@@ -38,11 +38,11 @@ public abstract class AbstractExecutor implements Executor {
                 case UPDATE:
                     return (T) executeUpdate(mapperWrapper);
                 default:
-                    throw  new IllegalStateException("no  excutor type for this mapperSql"+ mapperWrapper.getMapperMethod().getId());
+                    throw  new IllegalStateException("no  executor type for this mapperSql"+ mapperWrapper.getMapperMethod().getId());
             }
         } catch (Exception e) {
-            LogUtils.error(e,"mybatis excutor error :"+ ExceptionUtil.stacktraceToString(e));
-            throw new RuntimeException("mybatis excutor error");
+            LogUtils.error(e,"mybatis executor error :"+ ExceptionUtil.stacktraceToString(e));
+            throw new RuntimeException("mybatis executor error");
         }
     }
 
@@ -64,6 +64,7 @@ public abstract class AbstractExecutor implements Executor {
             Map<String, Object> map = new HashMap<>();
             for (int i = 0; i < columnCount; i++) {
                 String columnName = resultSet.getMetaData().getColumnName(i+1);
+
                 String str = resultSet.getString(i+1);
                 map.put(columnName,str);
             }
