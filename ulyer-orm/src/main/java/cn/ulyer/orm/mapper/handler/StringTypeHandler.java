@@ -1,5 +1,7 @@
 package cn.ulyer.orm.mapper.handler;
 
+import lombok.SneakyThrows;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,13 +12,23 @@ public class StringTypeHandler implements TypeHandler<String>{
         statement.setString(index,val);
     }
 
+    @SneakyThrows
     @Override
     public String getResult(ResultSet resultSet, String columnName) {
-        return null;
+        try {
+            return resultSet.getString(columnName);
+        } catch (SQLException e) {
+            throw new IllegalAccessException("no such value for column :"+columnName);
+        }
     }
 
+    @SneakyThrows
     @Override
-    public String getResult(ResultSet resultSet, int columnIndex) {
-        return null;
+    public String getResult(ResultSet resultSet, int columnIndex)  {
+        try {
+            return resultSet.getString(columnIndex);
+        } catch (SQLException e) {
+            throw new IllegalAccessException("no such value for column index:"+columnIndex);
+        }
     }
 }

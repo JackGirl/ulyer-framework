@@ -26,6 +26,7 @@ public class DefaultOrmFactory implements OrmFactory{
 
     public DefaultOrmFactory(OrmConfiguration ormConfiguration){
         this.setConfiguration(ormConfiguration);
+        ormConfiguration.registerPlugins();
         this.mapperProvider = new MapMapperProvider(ormConfiguration);
     }
 

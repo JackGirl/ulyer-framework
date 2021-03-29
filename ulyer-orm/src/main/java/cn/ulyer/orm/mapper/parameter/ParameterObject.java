@@ -51,9 +51,7 @@ public class ParameterObject {
             for (int i = 0; i < splits.length; i++) {
                 returnVal = getDeepParameterByName(returnVal==null?value:returnVal, splits[i]);
                 if (returnVal == null) {
-                    if (i != splits.length - 1) {
-                        throw new IllegalArgumentException("no parameter for nameExpression :" + name);
-                    }
+                    Assert.isFalse(i != splits.length - 1,"no parameter for nameExpression :" + name);
                     break;
                 }
             }
@@ -61,7 +59,7 @@ public class ParameterObject {
         if (returnVal == null) {
             returnVal = getDeepParameterByName(value, name);
         }
-        Assert.notNull(returnVal);
+        Assert.notNull(returnVal,"not found param for name :"+name);
         return (T) returnVal;
 
     }
@@ -94,9 +92,6 @@ public class ParameterObject {
     }
 
 
-    public static void main(String[] args) {
-        System.out.println(Number.class.isAssignableFrom(int.class));
-    }
 
 
 }

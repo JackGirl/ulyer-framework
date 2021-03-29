@@ -58,7 +58,8 @@ public class MapMapperProvider  implements MapperProvider{
     }
 
     private String getMapperNameSpace(String space){
-        return space.substring(0,space.lastIndexOf("."));
+        String namespace = space.substring(0,space.lastIndexOf("."));
+        return namespace;
     }
 
     private String getMapperMethodId(String space){

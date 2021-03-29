@@ -37,8 +37,7 @@ public class DefaultSqlSession implements SqlSession{
     @SneakyThrows
     @Override
     public <T> T execute(String namespace, Object... params) {
-        MapperWrapper mapperWrapper = mapperProvider.getMapperWrapper(namespace,params);
-        return executor.execute(mapperWrapper);
+        return executor.execute(mapperWrapper(namespace,params));
     }
 
     @Override

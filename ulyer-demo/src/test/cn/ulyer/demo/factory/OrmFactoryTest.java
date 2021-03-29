@@ -38,7 +38,13 @@ public class OrmFactoryTest {
         OrmFactory factory = new DefaultOrmFactory(configuration);
         factory.setDataSource(dataSource());
         UserMapper mapper = factory.getMapper(UserMapper.class);
-        mapper.getById("1");
+        User user = mapper.getById("1");
+        System.out.println(user);
+        SqlSession sqlSession = factory.createSqlSession();
+        User u = new User();
+        u.setName("orm 插入测试");
+        u.setId("222");
+        sqlSession.insert(UserMapper.class.getName()+"."+"saveUser",u);
     }
 
 

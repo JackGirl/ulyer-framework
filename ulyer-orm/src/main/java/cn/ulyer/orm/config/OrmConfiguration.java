@@ -1,24 +1,27 @@
 package cn.ulyer.orm.config;
 
 import cn.ulyer.orm.enums.PluginType;
-import cn.ulyer.orm.excutor.Executor;
 import cn.ulyer.orm.mapper.handler.*;
 import cn.ulyer.orm.plugin.OrmInterceptor;
 import cn.ulyer.orm.plugin.PluginInvocationHandler;
 import lombok.Data;
-import org.omg.PortableInterceptor.Interceptor;
 
-import java.util.*;
+import java.sql.JDBCType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @Data
 public class OrmConfiguration {
 
+    private List<OrmInterceptor> interceptors = new ArrayList<>();
+
     public final static String PARAM_SPLIT = ".";
 
     public final static String PARAM_REGEX = "#\\{(.+?)\\}";
 
-    public final static  Pattern PARAM_REGEX_PATTERN = Pattern.compile(PARAM_REGEX);
+    public final static Pattern PARAM_REGEX_PATTERN = Pattern.compile(PARAM_REGEX);
 
     private String[] mapperLocations;
 
@@ -30,9 +33,7 @@ public class OrmConfiguration {
 
     private Set<String> pluginClasses;
 
-
     private final RegisterConf registerConf = new RegisterConf();
-
 
 
     public void setBasePackages(String... packages) {
@@ -45,88 +46,49 @@ public class OrmConfiguration {
 
 
     public ExecutorHandler newExecutorHandler(DefaultExecutorHandler target) {
-        return (ExecutorHandler) registerConf.proxyPluginByType(PluginType.EXECUTE, target);
+        return (ExecutorHandler) proxyPluginByType(PluginType.EXECUTE, target);
     }
 
     public StatementHandler newStatementHandler(StatementHandler target) {
-        return (StatementHandler) registerConf.proxyPluginByType(PluginType.PREPARE, target);
+        return (StatementHandler) proxyPluginByType(PluginType.PREPARE, target);
     }
 
     public ParameterHandler newParameterHandler(ParameterHandler target) {
-        return (ParameterHandler) registerConf.proxyPluginByType(PluginType.PARAMETER, target);
+        return (ParameterHandler) proxyPluginByType(PluginType.PARAMETER, target);
     }
 
     public TypeHandler newResultHandler(TypeHandler target) {
-        return (TypeHandler) registerConf.proxyPluginByType(PluginType.RESULT, target);
+        return (TypeHandler) proxyPluginByType(PluginType.RESULT, target);
     }
 
-    public TypeHandler getTypeHandler(Class handlerClass){
+    public TypeHandler getTypeHandler(Class handlerClass) {
         return registerConf.typeHandlerMap.get(handlerClass);
     }
 
+    public TypeHandler getTypeHandler(JDBCType jdbcType) {
+        return registerConf.jdbcTypeTypeHandlers.get(jdbcType);
+    }
 
-
-
-    @Data
-     class RegisterConf {
-
-        private List<OrmInterceptor> interceptors = new ArrayList<>();
-
-        Map<Class<?>, TypeHandler> typeHandlerMap = new HashMap<>();
-
-        private boolean init = false;
-
-        public List<OrmInterceptor> getInterceptors(){
-            if(!this.init){
-                this.registerPlugins();
-            }
-            return interceptors;
-        }
-
-        public RegisterConf(){
-            this.registerTypeHandlers();
-        }
-
-        private void registerTypeHandlers() {
-            //typeHandlerMap.put()
-            typeHandlerMap.put(String.class,new StringTypeHandler());
-            typeHandlerMap.put(Integer.class,new IntegerTypeHandler());
-            typeHandlerMap.put(int.class,new IntegerTypeHandler());
-            typeHandlerMap.put(List.class,new ListTypeHandler());
-        }
-
-        void registerPlugins() {
-            if (!init) {
-                synchronized (this) {
-                    if(!init){
-                        for (String pluginClass : pluginClasses) {
-                            try {
-                                Class<?> c = Class.forName(pluginClass);
-                                interceptors.add((OrmInterceptor) c.newInstance());
-                            } catch (ClassNotFoundException e) {
-                                throw new RuntimeException("plugin class not loaded :" + pluginClass);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            } catch (InstantiationException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        this.init = true;
-                    }
-                }
+    Object proxyPluginByType(PluginType pluginType, Object target) {
+        for (OrmInterceptor interceptor : interceptors) {
+            if (pluginType.equals(interceptor.getType())) {
+                target = PluginInvocationHandler.newInstance(target, interceptor);
             }
         }
+        return target;
+    }
 
-        Object proxyPluginByType(PluginType pluginType, Object target) {
-            this.registerPlugins();
-            for (OrmInterceptor interceptor : interceptors) {
-                if (pluginType.equals(interceptor.getType())) {
-                    target = PluginInvocationHandler.newInstance(target, interceptor);
-                }
+
+    public void registerPlugins() {
+        for (String pluginClass : pluginClasses) {
+            try {
+                Class<?> c = Class.forName(pluginClass);
+                interceptors.add((OrmInterceptor) c.newInstance());
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException("plugin class not loaded :" + pluginClass);
+
             }
-            return target;
         }
-
 
     }
 

@@ -30,10 +30,14 @@ public class RegexParameterResolver implements ParameterHandler {
         int i = 1;
         while (matcher.find()){
             String paramPattern = matcher.group();
-            Object paramVal = mapperWrapper.getParameterObject().getParameterByName(paramPattern.replace("",""));
+            String paramName = paramPattern.replaceAll("[#{}]","");
+            Object paramVal = mapperWrapper.getParameterObject().getParameterByName(paramName);
             TypeHandler typeHandler = mapperWrapper.getOrmConfiguration().getTypeHandler(paramVal.getClass());
             typeHandler.setParam(preparedStatement,i,paramVal);
             i++;
         }
     }
+
+
 }
+
