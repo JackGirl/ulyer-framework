@@ -4,8 +4,6 @@ import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.parameter.ParameterObject;
 import lombok.Data;
 
-import java.sql.PreparedStatement;
-
 @Data
 public class MapperWrapper {
 

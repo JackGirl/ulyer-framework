@@ -6,7 +6,6 @@ import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.utils.LogUtils;
 import cn.ulyer.orm.utils.ResourceUtils;
 import lombok.SneakyThrows;
-import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.FileInputStream;

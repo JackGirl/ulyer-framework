@@ -3,9 +3,6 @@ package cn.ulyer.orm.excutor;
 
 import cn.ulyer.orm.mapper.MapperWrapper;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**

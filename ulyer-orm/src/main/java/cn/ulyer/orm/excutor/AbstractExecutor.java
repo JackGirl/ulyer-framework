@@ -1,6 +1,5 @@
 package cn.ulyer.orm.excutor;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.MapperWrapper;

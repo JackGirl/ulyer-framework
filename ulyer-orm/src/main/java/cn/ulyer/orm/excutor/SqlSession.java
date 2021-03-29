@@ -2,7 +2,6 @@ package cn.ulyer.orm.excutor;
 
 import java.sql.Connection;
 import java.util.List;
-import java.util.Map;
 
 public interface SqlSession {
 

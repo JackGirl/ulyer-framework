@@ -6,8 +6,6 @@ import java.sql.SQLException;
 
 public class DefaultTypeHandler implements TypeHandler {
 
-
-
     @Override
     public void setParam(PreparedStatement statement, int index, Object val) throws SQLException {
 

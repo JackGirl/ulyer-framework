@@ -4,12 +4,9 @@ import cn.ulyer.orm.mapper.reader.AnnotationReader;
 import cn.ulyer.orm.mapper.reader.DefaultReaderFilter;
 import cn.ulyer.orm.mapper.reader.OrmFileReader;
 import cn.ulyer.orm.mapper.reader.XmlReader;
-import lombok.SneakyThrows;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 

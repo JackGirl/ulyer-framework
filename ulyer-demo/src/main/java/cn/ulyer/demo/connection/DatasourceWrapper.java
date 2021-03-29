@@ -1,5 +1,6 @@
-package cn.ulyer.orm.connection;
+package cn.ulyer.demo.connection;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import lombok.Data;
 
 import javax.sql.DataSource;
@@ -17,40 +18,27 @@ import java.util.Properties;
 @Data
 public class DatasourceWrapper {
 
-    private DataSource dataSource;
+    private static DataSource dataSource;
 
     static Properties   jdbcProperties = new Properties();
 
-    private static String url;
-
-    private static String username;
-
-    private static String password;
-
-    private static String driver;
 
     static {
         try {
+            DruidDataSource druidDataSource = new DruidDataSource();
             jdbcProperties.load(DatasourceWrapper.class.getResourceAsStream("/jdbc.properties"));
-            url = jdbcProperties.getProperty("jdbc.url");
-            username = jdbcProperties.getProperty("jdbc.username");
-            password = jdbcProperties.getProperty("jdbc.password");
-            driver = jdbcProperties.getProperty("jdbc.driver-class-name");
-            Class.forName(driver);
+            druidDataSource.setUrl(jdbcProperties.getProperty("jdbc.url"));
+            druidDataSource.setUsername(jdbcProperties.getProperty("jdbc.username"));
+            druidDataSource.setPassword(jdbcProperties.getProperty("jdbc.password"));
+            druidDataSource.setDriverClassName(jdbcProperties.getProperty("jdbc.driver-class-name"));
+            dataSource = druidDataSource;
         } catch (Exception e) {
            throw new RuntimeException("read jdbc error");
         }
     }
 
-    public static Connection getConnection()  {
-        Connection connection =null ;
-        try{
-            connection = DriverManager.getConnection(url,username,password);
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println("connection is null");
-        }
-        return connection;
+    public static Connection getConnection() throws SQLException {
+       return dataSource.getConnection();
     }
 
     public static void closeConnection(Statement statement,Connection connection) {

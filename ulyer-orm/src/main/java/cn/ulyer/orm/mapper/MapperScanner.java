@@ -1,9 +1,7 @@
 package cn.ulyer.orm.mapper;
 
 import cn.ulyer.orm.config.OrmConfiguration;
-import org.dom4j.DocumentException;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 

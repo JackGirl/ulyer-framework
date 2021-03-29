@@ -6,7 +6,6 @@ import cn.ulyer.orm.excutor.SqlSession;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
 
 public class MapperInvocationHandler  implements InvocationHandler {
 

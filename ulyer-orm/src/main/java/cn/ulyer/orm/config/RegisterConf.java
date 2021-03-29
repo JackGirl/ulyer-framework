@@ -1,15 +1,14 @@
 package cn.ulyer.orm.config;
 
-import cn.ulyer.orm.enums.PluginType;
 import cn.ulyer.orm.mapper.handler.IntegerTypeHandler;
 import cn.ulyer.orm.mapper.handler.ListTypeHandler;
 import cn.ulyer.orm.mapper.handler.StringTypeHandler;
 import cn.ulyer.orm.mapper.handler.TypeHandler;
-import cn.ulyer.orm.plugin.OrmInterceptor;
-import cn.ulyer.orm.plugin.PluginInvocationHandler;
 
 import java.sql.JDBCType;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RegisterConf {
 
