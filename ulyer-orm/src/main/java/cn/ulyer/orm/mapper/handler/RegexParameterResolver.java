@@ -2,8 +2,6 @@ package cn.ulyer.orm.mapper.handler;
 
 import cn.ulyer.orm.mapper.MapperWrapper;
 
-import java.util.regex.Pattern;
-
 /**
  * @Author: yeqi
  * @Description:
@@ -11,7 +9,6 @@ import java.util.regex.Pattern;
  */
 public class RegexParameterResolver implements ParameterHandler {
 
-    Pattern pattern = Pattern.compile("\\{(.+?)\\}");
 
 
     @Override

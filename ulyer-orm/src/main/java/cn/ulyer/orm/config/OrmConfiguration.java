@@ -12,6 +12,9 @@ import java.util.*;
 @Data
 public class OrmConfiguration {
 
+    private final static String PARAM_SPLIT = ".";
+
+    final static String PARAM_REGEX = "#\\{(.+?)\\}";
 
     private String[] mapperLocations;
 
@@ -26,6 +29,13 @@ public class OrmConfiguration {
 
     private final RegisterConf registerConf = new RegisterConf();
 
+    public static String paramSplit(){
+        return PARAM_SPLIT;
+    }
+
+    public static String paramRegex(){
+        return PARAM_REGEX;
+    }
 
     public void setBasePackages(String... packages) {
         this.basePackages = packages;

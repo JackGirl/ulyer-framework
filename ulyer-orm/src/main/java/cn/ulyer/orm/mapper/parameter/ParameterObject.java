@@ -2,6 +2,7 @@ package cn.ulyer.orm.mapper.parameter;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
+import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.MapperMethod;
 import cn.ulyer.orm.mapper.ParameterMapping;
 import cn.ulyer.orm.utils.LogUtils;
@@ -21,7 +22,6 @@ public class ParameterObject {
 
     private List<ParameterMapping> parameterMappings;
 
-    private final static String PARAM_SPLIT = ".";
 
     public ParameterObject(Object value, Class<?> valueClass, List<ParameterMapping> parameterMappings) {
         this.valueClass = valueClass;
@@ -45,8 +45,8 @@ public class ParameterObject {
 
     public <T> T getParameterByName(String name) {
         Object returnVal = null;
-        if (name.contains(PARAM_SPLIT)) {
-            String[] splits = StrUtil.split(name, PARAM_SPLIT);
+        if (name.contains(OrmConfiguration.paramSplit())) {
+            String[] splits = StrUtil.split(name, OrmConfiguration.paramSplit());
             returnVal = null;
             for (int i = 0; i < splits.length; i++) {
                 returnVal = getDeepParameterByName(returnVal==null?value:returnVal, splits[i]);

@@ -39,12 +39,18 @@ public class DefaultSqlSession implements SqlSession{
     @Override
     public <T> T execute(String namespace, Object... params) {
         MapperWrapper mapperWrapper = mapperProvider.getMapperWrapper(namespace,params);
+        //标签根据参数解析
+
+        //生成sql
         StatementHandler statementHandler = ormConfiguration.newStatementHandler(new PrepareStatementHandler(connection));
         PreparedStatement statement = statementHandler.createStatement(mapperWrapper);
         mapperWrapper.setStatement(statement);
+        //设置参数
         ParameterHandler parameterHandler = ormConfiguration.newParameterHandler(new RegexParameterResolver());
         parameterHandler.setParameter(mapperWrapper);
+        //执行
         Executor executor = ormConfiguration.newExecutor(this.executor);
+        //返回包装
         ResultSet resultMap =  executor.execute(mapperWrapper);
         TypeHandler typeHandler = ormConfiguration.newResultHandler(new DefaultTypeHandler());
         return null;

@@ -16,7 +16,8 @@ public class MapperWrapper {
 
     private ParameterObject parameterObject;
 
-
     private PreparedStatement statement;
+
+
 
 }
