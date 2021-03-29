@@ -1,13 +1,16 @@
 package cn.ulyer.orm.excutor;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.Map;
 
 public interface SqlSession {
 
     <T> T execute(String namespace,Object... params);
 
-    <T> T selectList(String namespace, Object ...params);
+    <E> List<E> selectList(String namespace, Object ...params);
+
+    <T> T selectOne(String namespace ,Object ...params);
 
     int update(String namespace,  Object ...params);
 

@@ -39,41 +39,32 @@ public class DefaultSqlSession implements SqlSession{
     @SneakyThrows
     @Override
     public <T> T execute(String namespace, Object... params) {
-        MapperWrapper mapperWrapper = mapperProvider.getMapperWrapper(namespace,params);
-        //标签根据参数解析
-
-        //生成sql
-        StatementHandler statementHandler = ormConfiguration.newStatementHandler(new PrepareStatementHandler());
-        PreparedStatement statement = statementHandler.createStatement(connection,mapperWrapper);
-        //设置参数
-        ParameterHandler parameterHandler = ormConfiguration.newParameterHandler(new RegexParameterResolver());
-        parameterHandler.setParameter(statement,mapperWrapper);
-        //执行
-        Executor executor = ormConfiguration.newExecutor(this.executor);
-        //返回包装
-        List resultMap =  executor.execute(statement,mapperWrapper);
-        TypeHandler typeHandler = ormConfiguration.newResultHandler(new DefaultTypeHandler());
-        return (T) resultMap;
+        return executor.execute(mapperWrapper(namespace,params));
     }
 
     @Override
-    public <T> T selectList(String namespace,  Object ...params) {
-        return this.execute(namespace,new Object[]{params});
+    public <E> List<E> selectList(String namespace,  Object ...params) {
+        return executor.selectList(mapperWrapper(namespace,params));
+    }
+
+    @Override
+    public <T> T selectOne(String namespace, Object... params) {
+        return executor.selectOne(mapperWrapper(namespace,params));
     }
 
     @Override
     public int update(String namespace,  Object ...params) {
-        return this.execute(namespace,new Object[]{params});
+        return this.executor.update(mapperWrapper(namespace,params));
     }
 
     @Override
     public int insert(String namespace,  Object ...params) {
-        return this.execute(namespace,new Object[]{params});
+        return this.executor.insert(mapperWrapper(namespace,params));
     }
 
     @Override
     public int delete(String namespace, Object ...params) {
-        return this.execute(namespace,new Object[]{params});
+        return this.executor.delete(mapperWrapper(namespace,params));
     }
 
     @Override
@@ -82,7 +73,9 @@ public class DefaultSqlSession implements SqlSession{
     }
 
 
-
+    private MapperWrapper mapperWrapper(String namespace,Object...params){
+        return mapperProvider.getMapperWrapper(namespace,params);
+    }
 
 
 
