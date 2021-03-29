@@ -4,6 +4,8 @@ import cn.ulyer.orm.config.OrmConfiguration;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Connection;
+
 /**
  * @Author: yeqi
  * @Description:
@@ -15,8 +17,8 @@ import lombok.Setter;
 public class SimpleExecutor extends AbstractExecutor {
 
 
-    public SimpleExecutor (OrmConfiguration ormConfiguration){
-        super(ormConfiguration);
+    public SimpleExecutor (Connection connection,OrmConfiguration ormConfiguration){
+        super(connection,ormConfiguration);
     }
 
 

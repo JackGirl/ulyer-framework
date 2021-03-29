@@ -44,9 +44,8 @@ public class OrmConfiguration {
     }
 
 
-
-    public Executor newExecutor(Executor target) {
-        return (Executor) registerConf.proxyPluginByType(PluginType.EXECUTE, target);
+    public ExecutorHandler newExecutorHandler(DefaultExecutorHandler target) {
+        return (ExecutorHandler) registerConf.proxyPluginByType(PluginType.EXECUTE, target);
     }
 
     public StatementHandler newStatementHandler(StatementHandler target) {
@@ -64,6 +63,8 @@ public class OrmConfiguration {
     public TypeHandler getTypeHandler(Class handlerClass){
         return registerConf.typeHandlerMap.get(handlerClass);
     }
+
+
 
 
     @Data

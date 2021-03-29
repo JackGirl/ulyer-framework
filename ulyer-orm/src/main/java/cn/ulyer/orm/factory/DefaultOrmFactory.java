@@ -2,8 +2,6 @@ package cn.ulyer.orm.factory;
 
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.excutor.DefaultSqlSession;
-import cn.ulyer.orm.excutor.Executor;
-import cn.ulyer.orm.excutor.SimpleExecutor;
 import cn.ulyer.orm.excutor.SqlSession;
 import cn.ulyer.orm.mapper.MapMapperProvider;
 import cn.ulyer.orm.mapper.MapperProvider;
@@ -11,10 +9,6 @@ import lombok.Data;
 import lombok.SneakyThrows;
 
 import javax.sql.DataSource;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.sql.SQLException;
 
 /**
  * @Author: yeqi
@@ -26,15 +20,12 @@ public class DefaultOrmFactory implements OrmFactory{
 
     private MapperProvider mapperProvider ;
 
-    private Executor executor ;
-
     private DataSource dataSource;
 
     private OrmConfiguration ormConfiguration ;
 
     public DefaultOrmFactory(OrmConfiguration ormConfiguration){
         this.setConfiguration(ormConfiguration);
-        this.executor = new SimpleExecutor(ormConfiguration);
         this.mapperProvider = new MapMapperProvider(ormConfiguration);
     }
 
@@ -62,7 +53,7 @@ public class DefaultOrmFactory implements OrmFactory{
     @Override
     @SneakyThrows
     public SqlSession createSqlSession() {
-        return new DefaultSqlSession(executor,mapperProvider,ormConfiguration,dataSource.getConnection());
+        return new DefaultSqlSession(mapperProvider,ormConfiguration,dataSource.getConnection());
     }
 
     @Override

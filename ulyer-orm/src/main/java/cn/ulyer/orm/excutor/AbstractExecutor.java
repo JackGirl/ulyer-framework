@@ -20,42 +20,38 @@ public abstract class AbstractExecutor implements Executor {
 
     private OrmConfiguration ormConfiguration ;
 
-    public AbstractExecutor(OrmConfiguration ormConfiguration){
+    private Connection connection;
+
+    private StatementHandler statementHandler ;
+
+    private ExecutorHandler executorHandler;
+
+    public AbstractExecutor(Connection connection,OrmConfiguration ormConfiguration){
         this.ormConfiguration = ormConfiguration;
+        this.connection = connection;
+        this.statementHandler = new PrepareStatementHandler();
+        executorHandler = ormConfiguration.newExecutorHandler(new DefaultExecutorHandler());
     }
 
-    public PreparedStatement preparedStatement(Connection connection,MapperWrapper mapperWrapper){
-        PreparedStatement statement = null;
-        try{
-            //标签根据参数解析
 
-            //生成sql
-            StatementHandler statementHandler = ormConfiguration.newStatementHandler(new PrepareStatementHandler());
-            statement = statementHandler.createStatement(connection,mapperWrapper);
-            //设置参数
-            ParameterHandler parameterHandler = ormConfiguration.newParameterHandler(new RegexParameterResolver());
-            parameterHandler.setParameter(statement,mapperWrapper);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return statement;
-    }
+
 
     @Override
-    public <T> T execute( MapperWrapper mapperWrapper) throws SQLException {
-        Connection connection = DatasourceWrapper.getConnection();
+    public <T> T execute( MapperWrapper mapperWrapper) {
+        PreparedStatement statement = preparedStatement(this.connection,mapperWrapper);
         //执行
-        SimpleExecutor executor = (SimpleExecutor) ormConfiguration.newExecutor(this);
         //返回包装
         try {
             connection.setAutoCommit(false);
             switch (mapperWrapper.getMapperMethod().getMapperSqlType()){
                 case SELECT:
-                    return executor.executeQuery(preparedStatement(connection,mapperWrapper),mapperWrapper);
+                   ResultSet resultSet = this.executorHandler.query(statement);
+                    return resolverResultSet(resultSet,mapperWrapper);
                 case DELETE:
                 case INSERT:
                 case UPDATE:
-                    return (T) executeUpdate(preparedStatement(connection,mapperWrapper),mapperWrapper);
+                    Object count = Integer.valueOf(executorHandler.update(statement,null));
+                    return (T)count;
                 default:
                     throw  new IllegalStateException("no  executor type for this mapperSql"+ mapperWrapper.getMapperMethod().getId());
             }
@@ -65,52 +61,71 @@ public abstract class AbstractExecutor implements Executor {
         }
     }
 
+
+
     @Override
     public <E> List<E> selectList(MapperWrapper mapperWrapper) {
-
-        return null;
+        PreparedStatement statement = preparedStatement(this.connection,mapperWrapper);
+        ResultSet resultSet = this.executorHandler.query(statement);
+        return resolverResultSet(resultSet,mapperWrapper);
     }
 
     @Override
     public <T> T selectOne(MapperWrapper mapperWrapper) {
-        return null;
+        PreparedStatement statement = preparedStatement(this.connection,mapperWrapper);
+        ResultSet resultSet = this.executorHandler.query(statement);
+        return resolverResultSet(resultSet,mapperWrapper);
     }
 
     @Override
     public int insert(MapperWrapper mapperWrapper) {
-        return 0;
+        PreparedStatement statement = preparedStatement(this.connection,mapperWrapper);
+         return this.executorHandler.update(statement,null);
+
     }
 
     @Override
     public int update(MapperWrapper mapperWrapper) {
-        return 0;
+        PreparedStatement statement = preparedStatement(this.connection,mapperWrapper);
+        return this.executorHandler.update(statement,null);
     }
 
     @Override
     public int delete(MapperWrapper mapperWrapper) {
-        return 0;
+        PreparedStatement statement = preparedStatement(this.connection,mapperWrapper);
+        return this.executorHandler.update(statement,null);
     }
 
-    public  Integer executeUpdate(PreparedStatement statement, MapperWrapper mapperWrapper) throws SQLException {
-        int result = statement.executeUpdate();
-        return result;
-    }
+    public <T>T resolverResultSet(ResultSet resultSet,MapperWrapper mapperWrapper){
+        Class resultType = mapperWrapper.getMapperMethod().getResultType();
+        try {
+            if(resultSet.getRow()>1){
+                List list = new ArrayList();
+                while (resultSet.next()){
 
-    public <T> T executeQuery(PreparedStatement statement,MapperWrapper mapperWrapper) throws SQLException{
-        ResultSet resultSet ;
-        resultSet = statement.executeQuery();
-        int columnCount = resultSet.getMetaData().getColumnCount();
-        List<Object> list = new ArrayList<>();
-        while (resultSet.next()){
-            Map<String, Object> map = new HashMap<>();
-            for (int i = 0; i < columnCount; i++) {
-                String columnName = resultSet.getMetaData().getColumnName(i+1);
-                String str = resultSet.getString(i+1);
-                map.put(columnName,str);
+                }
             }
-            list.add(map);
+        } catch (SQLException e) {
+            LogUtils.error(e);
+            throw new RuntimeException("resolver result error");
         }
-        return (T) list;
+        return null;
+    }
+
+    public PreparedStatement preparedStatement(Connection connection,MapperWrapper mapperWrapper){
+        PreparedStatement statement = null;
+        try{
+            //标签根据参数解析
+            //生成sql
+            StatementHandler statementHandler = ormConfiguration.newStatementHandler(this.statementHandler);
+            statement = statementHandler.createStatement(connection,mapperWrapper);
+            //设置参数
+            ParameterHandler parameterHandler = ormConfiguration.newParameterHandler(new RegexParameterResolver());
+            parameterHandler.setParameter(statement,mapperWrapper);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return statement;
     }
 
 

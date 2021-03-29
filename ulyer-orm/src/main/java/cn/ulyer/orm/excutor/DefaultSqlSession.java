@@ -3,17 +3,13 @@ package cn.ulyer.orm.excutor;
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.MapperProvider;
 import cn.ulyer.orm.mapper.MapperWrapper;
-import cn.ulyer.orm.mapper.handler.*;
 import lombok.SneakyThrows;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 
 public class DefaultSqlSession implements SqlSession{
 
-    private Executor executor;
 
     private MapperProvider mapperProvider;
 
@@ -21,11 +17,13 @@ public class DefaultSqlSession implements SqlSession{
 
     private Connection connection;
 
-    public DefaultSqlSession(Executor executor, MapperProvider mapperProvider,OrmConfiguration ormConfiguration,Connection connection){
-        this.executor = executor;
+    private Executor executor;
+
+    public DefaultSqlSession( MapperProvider mapperProvider,OrmConfiguration ormConfiguration,Connection connection){
         this.mapperProvider = mapperProvider;
         this.ormConfiguration = ormConfiguration;
         this.connection = connection;
+        executor = new SimpleExecutor(connection,ormConfiguration);
     }
 
 
@@ -39,7 +37,8 @@ public class DefaultSqlSession implements SqlSession{
     @SneakyThrows
     @Override
     public <T> T execute(String namespace, Object... params) {
-        return executor.execute(mapperWrapper(namespace,params));
+        MapperWrapper mapperWrapper = mapperProvider.getMapperWrapper(namespace,params);
+        return executor.execute(mapperWrapper);
     }
 
     @Override

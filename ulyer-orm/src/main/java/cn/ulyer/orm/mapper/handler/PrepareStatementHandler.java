@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Data
@@ -15,4 +16,6 @@ public class PrepareStatementHandler implements StatementHandler{
     public PreparedStatement createStatement(Connection connection,MapperWrapper mapperWrapper) throws SQLException {
        return connection.prepareStatement(mapperWrapper.getBoundSql().replaceAll(OrmConfiguration.PARAM_REGEX," ? "));
     }
+
+
 }
