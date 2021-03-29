@@ -111,18 +111,13 @@ public abstract class AbstractExecutor implements Executor {
 
     public <T>T resolverResultSet(ResultSet resultSet,MapperWrapper mapperWrapper){
         try {
-            int rows = resultSet.getRow();
             Class elementType = getMethodElementReturnType(mapperWrapper);
-            if(rows>1){
-                List list = new ArrayList();
-                for (int i = 0; i < rows; i++) {
-                    Object element = getElementFromResultSet(resultSet,elementType);
-                    boolean add = element==null?false:list.add(element);
-                }
-                return (T) list;
+            List result = getElementFromResultSet(resultSet,elementType);
+            if(List.class.isAssignableFrom(elementType)){
+                return (T) result;
             }
-            return (T) getElementFromResultSet(resultSet,elementType);
-        } catch (SQLException|ReflectiveOperationException e) {
+            return result==null?null: result.size()>1? (T) result : (T) result.get(0);
+        } catch (ReflectiveOperationException e) {
             throw new RuntimeException(e.getMessage());
         }finally {
             try {
@@ -134,35 +129,40 @@ public abstract class AbstractExecutor implements Executor {
     }
 
     @SneakyThrows
-    public Object getElementFromResultSet(ResultSet resultSet,Class elementType)  {
+    public List getElementFromResultSet(ResultSet resultSet,Class elementType)  {
         ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
         int columnCount = resultSetMetaData.getColumnCount();
-        if(resultSet.next()){
+        List list = null;
+        while (resultSet.next()){
+            if(list==null){
+                list = new ArrayList();
+            }
             if(Map.class.isAssignableFrom(elementType)){
                 Map<String,Object> element = new HashMap<>();
                 for (int i = 1; i <= columnCount; i++) {
                     Object val = ormConfiguration.getTypeHandler(JDBCType.valueOf(resultSetMetaData.getColumnType(i))).getResult(resultSet,i);
                     element.put(resultSetMetaData.getColumnName(i),val);
                 }
-                return element;
-            }
-            if(Number.class.isAssignableFrom(elementType)){
+                list.add(element);
+            }else if(Number.class.isAssignableFrom(elementType)){
                 Assert.isFalse(columnCount>1,"返回值类型不配 存在多列数据");
                 Object val = ormConfiguration.getTypeHandler(JDBCType.valueOf(resultSetMetaData.getColumnType(1))).getResult(resultSet,1);
-                return val;
+                list.add(val);
+            }else{
+                Object obj = elementType.newInstance();
+                for (int i = 1; i <= columnCount; i++) {
+                    Object val = ormConfiguration.getTypeHandler(JDBCType.valueOf(resultSetMetaData.getColumnType(i))).getResult(resultSet,i);
+                    String columnName = resultSetMetaData.getColumnName(i);
+                    Field field = elementType.getDeclaredField(columnName);
+                    field.setAccessible(true);
+                    Assert.notNull(field);
+                    field.set(obj,val);
+                }
+                list.add(obj);
             }
-            Object obj = elementType.newInstance();
-            for (int i = 1; i <= columnCount; i++) {
-                Object val = ormConfiguration.getTypeHandler(JDBCType.valueOf(resultSetMetaData.getColumnType(i))).getResult(resultSet,i);
-                String columnName = resultSetMetaData.getColumnName(i);
-                Field field = elementType.getDeclaredField(columnName);
-                field.setAccessible(true);
-                Assert.notNull(field);
-                field.set(obj,val);
-            }
-            return obj;
+
         }
-        return null;
+        return list;
     }
 
 

@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.io.FileNotFoundException;
+import java.util.List;
+import java.util.Map;
 
 public class OrmFactoryTest {
 
@@ -45,6 +47,8 @@ public class OrmFactoryTest {
         u.setName("orm 插入测试");
         u.setId("222");
         sqlSession.insert(UserMapper.class.getName()+"."+"saveUser",u);
+        List<Map> users = mapper.listUser();
+        System.out.println(users);
     }
 
 
