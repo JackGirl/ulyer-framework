@@ -1,7 +1,7 @@
 <orm namespace="cn.ulyer.demo.dao.UserMapper" version="orm1">
 
     <select id="getById">
-        select * from user where id = {id}
+        select * from user where id = #{id}
     </select>
 
 

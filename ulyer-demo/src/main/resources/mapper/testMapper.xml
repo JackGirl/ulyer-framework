@@ -1,11 +1,11 @@
 <orm namespace="cn.ulyer.demo.entity.Test2" version="orm1">
 
     <select id="getUser">
-        select * from test_2 where id = {id}
+        select * from test_2 where id = #{id}
     </select>
 
     <insert id="insert">
-        select * from test_2 where id = {id}
+        select * from test_2 where id = #{id}
     </insert>
 
 </orm>

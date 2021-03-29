@@ -21,23 +21,22 @@ public class OrmFactoryTest {
 
 
 
-    public DataSource dataSource(){
+    public static DataSource dataSource(){
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setUrl("jdbc:mysql://localhost:3306/framework-db?useSSL=false&useCharacter=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai");
         dataSource.setPassword("xiaoxiao1997");
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("root");
         dataSource.setDbType(DbType.mysql);
-
         return dataSource;
     }
+
 
     @Test
     public void flow() throws FileNotFoundException {
         OrmConfiguration configuration = ResourceConfigurationLoader.loadConfiguration("orm.yml");
         OrmFactory factory = new DefaultOrmFactory(configuration);
         factory.setDataSource(dataSource());
-        System.out.println(JSON.toJSONString(UserMapper.class.getInterfaces()));
         UserMapper mapper = factory.getMapper(UserMapper.class);
         mapper.getById("1");
     }

@@ -9,6 +9,7 @@ import lombok.SneakyThrows;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 public class DefaultSqlSession implements SqlSession{
 
@@ -42,18 +43,17 @@ public class DefaultSqlSession implements SqlSession{
         //标签根据参数解析
 
         //生成sql
-        StatementHandler statementHandler = ormConfiguration.newStatementHandler(new PrepareStatementHandler(connection));
-        PreparedStatement statement = statementHandler.createStatement(mapperWrapper);
-        mapperWrapper.setStatement(statement);
+        StatementHandler statementHandler = ormConfiguration.newStatementHandler(new PrepareStatementHandler());
+        PreparedStatement statement = statementHandler.createStatement(connection,mapperWrapper);
         //设置参数
         ParameterHandler parameterHandler = ormConfiguration.newParameterHandler(new RegexParameterResolver());
-        parameterHandler.setParameter(mapperWrapper);
+        parameterHandler.setParameter(statement,mapperWrapper);
         //执行
         Executor executor = ormConfiguration.newExecutor(this.executor);
         //返回包装
-        ResultSet resultMap =  executor.execute(mapperWrapper);
+        List resultMap =  executor.execute(statement,mapperWrapper);
         TypeHandler typeHandler = ormConfiguration.newResultHandler(new DefaultTypeHandler());
-        return null;
+        return (T) resultMap;
     }
 
     @Override

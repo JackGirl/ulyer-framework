@@ -17,9 +17,12 @@ public class MapMapperProvider  implements MapperProvider{
 
     Map<String,MapperDefinition> mappers = new ConcurrentHashMap<>(100);
 
+    private OrmConfiguration ormConfiguration;
+
     public MapMapperProvider(OrmConfiguration ormConfiguration){
         scanners.add(new SimpleMapperScanner());
         this.setScanners(scanners);
+        this.ormConfiguration = ormConfiguration;
         for (MapperScanner scanner : scanners) {
             mappers.putAll(scanner.scanner(ormConfiguration));
         }
@@ -48,6 +51,7 @@ public class MapMapperProvider  implements MapperProvider{
         MapperWrapper mapperWrapper = new MapperWrapper();
         mapperWrapper.setBoundSql(mapperMethod.getSql());
         mapperWrapper.setMapperMethod(mapperMethod);
+        mapperWrapper.setOrmConfiguration(ormConfiguration);
         mapperWrapper.setMapperDefinition(mapperDefinition);
         mapperWrapper.setParameterObject(ParameterObject.newParameter(mapperMethod,params));
         return mapperWrapper;

@@ -4,6 +4,7 @@ package cn.ulyer.orm.excutor;
 
 import cn.ulyer.orm.mapper.MapperWrapper;
 
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 /**
@@ -14,7 +15,7 @@ import java.sql.Statement;
 public interface Executor {
 
 
-    <T> T execute(MapperWrapper mapperWrapper) ;
+    <T> T execute(PreparedStatement statement,MapperWrapper mapperWrapper) ;
 
 
 }

@@ -2,22 +2,17 @@ package cn.ulyer.orm.mapper.handler;
 
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.MapperWrapper;
+import lombok.Data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
+@Data
 public class PrepareStatementHandler implements StatementHandler{
 
-    private Connection connection;
-
-    public PrepareStatementHandler(Connection connection) {
-        this.connection = connection;
-    }
-
     @Override
-    public PreparedStatement createStatement(MapperWrapper mapperWrapper) throws SQLException {
-        return connection.prepareStatement(mapperWrapper.getBoundSql().replaceAll(OrmConfiguration.paramRegex()," ? "));
+    public PreparedStatement createStatement(Connection connection,MapperWrapper mapperWrapper) throws SQLException {
+       return connection.prepareStatement(mapperWrapper.getBoundSql().replaceAll(OrmConfiguration.PARAM_REGEX," ? "));
     }
 }

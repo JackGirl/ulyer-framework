@@ -2,10 +2,13 @@ package cn.ulyer.orm.mapper.handler;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class IntegerTypeHandler implements TypeHandler<Integer>{
+
+
     @Override
-    public void setParam(PreparedStatement statement, int index) {
+    public void setParam(PreparedStatement statement, int index, Integer val) throws SQLException {
 
     }
 

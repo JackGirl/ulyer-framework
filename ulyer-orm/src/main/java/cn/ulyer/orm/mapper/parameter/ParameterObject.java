@@ -45,8 +45,8 @@ public class ParameterObject {
 
     public <T> T getParameterByName(String name) {
         Object returnVal = null;
-        if (name.contains(OrmConfiguration.paramSplit())) {
-            String[] splits = StrUtil.split(name, OrmConfiguration.paramSplit());
+        if (name.contains(OrmConfiguration.PARAM_SPLIT)) {
+            String[] splits = StrUtil.split(name, OrmConfiguration.PARAM_SPLIT);
             returnVal = null;
             for (int i = 0; i < splits.length; i++) {
                 returnVal = getDeepParameterByName(returnVal==null?value:returnVal, splits[i]);

@@ -1,6 +1,7 @@
 package cn.ulyer.demo;
 
 import cn.ulyer.demo.proxy.*;
+import cn.ulyer.orm.excutor.Executor;
 import lombok.Data;
 import org.junit.Test;
 
@@ -22,10 +23,8 @@ public class ProxyTest {
 
         SimpleExecutor excutor = new SimpleExecutor();
 
-       // excutor = (Excutor) createProxy(excutor);
-        Invo invo = new Invo();
+       Excutor e = (Excutor) createProxy(excutor);
 
-        Excutor e = (Excutor) invo.newInstance(excutor,invo);
 
         String b = (String) e.execute("aaaa");
 

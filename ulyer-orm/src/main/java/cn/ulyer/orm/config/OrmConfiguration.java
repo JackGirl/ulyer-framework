@@ -6,15 +6,19 @@ import cn.ulyer.orm.mapper.handler.*;
 import cn.ulyer.orm.plugin.OrmInterceptor;
 import cn.ulyer.orm.plugin.PluginInvocationHandler;
 import lombok.Data;
+import org.omg.PortableInterceptor.Interceptor;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Data
 public class OrmConfiguration {
 
-    private final static String PARAM_SPLIT = ".";
+    public final static String PARAM_SPLIT = ".";
 
-    final static String PARAM_REGEX = "#\\{(.+?)\\}";
+    public final static String PARAM_REGEX = "#\\{(.+?)\\}";
+
+    public final static  Pattern PARAM_REGEX_PATTERN = Pattern.compile(PARAM_REGEX);
 
     private String[] mapperLocations;
 
@@ -29,13 +33,7 @@ public class OrmConfiguration {
 
     private final RegisterConf registerConf = new RegisterConf();
 
-    public static String paramSplit(){
-        return PARAM_SPLIT;
-    }
 
-    public static String paramRegex(){
-        return PARAM_REGEX;
-    }
 
     public void setBasePackages(String... packages) {
         this.basePackages = packages;
@@ -48,7 +46,7 @@ public class OrmConfiguration {
 
 
     public Executor newExecutor(Executor target) {
-        return (Executor) registerConf.proxyPluginByType(PluginType.PREPARE, target);
+        return (Executor) registerConf.proxyPluginByType(PluginType.EXECUTE, target);
     }
 
     public StatementHandler newStatementHandler(StatementHandler target) {
@@ -61,6 +59,10 @@ public class OrmConfiguration {
 
     public TypeHandler newResultHandler(TypeHandler target) {
         return (TypeHandler) registerConf.proxyPluginByType(PluginType.RESULT, target);
+    }
+
+    public TypeHandler getTypeHandler(Class handlerClass){
+        return registerConf.typeHandlerMap.get(handlerClass);
     }
 
 

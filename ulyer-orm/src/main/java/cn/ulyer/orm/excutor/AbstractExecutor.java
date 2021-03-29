@@ -17,7 +17,6 @@ import java.util.Map;
 public abstract class AbstractExecutor implements Executor {
 
 
-
     private OrmConfiguration ormConfiguration ;
 
     public AbstractExecutor(OrmConfiguration ormConfiguration){
@@ -26,17 +25,17 @@ public abstract class AbstractExecutor implements Executor {
 
 
     @Override
-    public <T> T execute(final MapperWrapper mapperWrapper) {
+    public <T> T execute(PreparedStatement statement,final MapperWrapper mapperWrapper) {
         Connection connection = DatasourceWrapper.getConnection();
         try {
             connection.setAutoCommit(false);
             switch (mapperWrapper.getMapperMethod().getMapperSqlType()){
                 case SELECT:
-                    return executeQuery(mapperWrapper);
+                    return executeQuery(statement,mapperWrapper);
                 case DELETE:
                 case INSERT:
                 case UPDATE:
-                    return (T) executeUpdate(mapperWrapper);
+                    return (T) executeUpdate(statement,mapperWrapper);
                 default:
                     throw  new IllegalStateException("no  executor type for this mapperSql"+ mapperWrapper.getMapperMethod().getId());
             }
@@ -50,14 +49,14 @@ public abstract class AbstractExecutor implements Executor {
 
 
 
-    public  Object executeUpdate(MapperWrapper mapperWrapper) throws SQLException {
-        int result = mapperWrapper.getStatement().executeUpdate();
+    public  Object executeUpdate(PreparedStatement statement,MapperWrapper mapperWrapper) throws SQLException {
+        int result = statement.executeUpdate();
         return result;
     }
 
-    public <T> T executeQuery(MapperWrapper mapperWrapper) throws SQLException{
+    public <T> T executeQuery(PreparedStatement statement,MapperWrapper mapperWrapper) throws SQLException{
         ResultSet resultSet ;
-        resultSet = mapperWrapper.getStatement().executeQuery();
+        resultSet = statement.executeQuery();
         int columnCount = resultSet.getMetaData().getColumnCount();
         List<Object> list = new ArrayList<>();
         while (resultSet.next()){

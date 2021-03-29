@@ -1,5 +1,6 @@
 package cn.ulyer.orm.mapper;
 
+import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.parameter.ParameterObject;
 import lombok.Data;
 
@@ -16,8 +17,7 @@ public class MapperWrapper {
 
     private ParameterObject parameterObject;
 
-    private PreparedStatement statement;
-
+    private OrmConfiguration ormConfiguration;
 
 
 }
