@@ -10,6 +10,7 @@ public class DefaultExecutorHandler implements ExecutorHandler{
 
     @Override
     public int update(PreparedStatement statement, TypeHandler typeHandler)  {
+        LogUtils.info(statement);
         try{
             return statement.executeUpdate();
         }catch (Exception e){
@@ -20,6 +21,7 @@ public class DefaultExecutorHandler implements ExecutorHandler{
 
     @Override
     public ResultSet query(PreparedStatement preparedStatement) {
+        LogUtils.info(preparedStatement);
         try{
             return preparedStatement.executeQuery();
         }catch (Exception e){

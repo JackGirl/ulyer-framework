@@ -20,4 +20,10 @@ public class LogUtils {
         System.out.println("error msg: "+msg+"error stacktrace:"+ ExceptionUtil.stacktraceToString(e));
     }
 
+    public static void info(Object msg){
+        System.out.println(msg==null?"null":msg.toString());
+    }
+
+
+
 }

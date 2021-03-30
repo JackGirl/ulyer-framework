@@ -1,5 +1,7 @@
-orm:
-  mapperLocations:
-    - mapper
-  basePackages:
-    - com.test.mapper
+
+mapperLocations:
+  - mapper
+basePackages:
+  - cn.ulyer.demo.dao
+pluginClasses:
+  - cn.ulyer.orm.plugin.PageInterceptor

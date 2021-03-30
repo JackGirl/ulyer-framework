@@ -5,7 +5,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.MapperMethod;
 import cn.ulyer.orm.mapper.ParameterMapping;
-import cn.ulyer.orm.utils.LogUtils;
 import lombok.Data;
 
 import java.lang.reflect.Field;
@@ -32,9 +31,6 @@ public class ParameterObject {
     public static ParameterObject newParameter(MapperMethod mapperMethod, Object... parameter) {
         if (parameter == null) {
             return new ParameterObject(null, Object.class, mapperMethod.getParameterMappings());
-        }
-        if (parameter.length == 1) {
-            return new ParameterObject(parameter[0], parameter[0].getClass(), mapperMethod.getParameterMappings());
         }
         Map<String, Object> value = new HashMap<>(5);
         for (int i = 0; i < parameter.length; i++) {
@@ -85,8 +81,7 @@ public class ParameterObject {
             field.setAccessible(true);
             returnVal = field.get(target);
         } catch (Exception e) {
-            LogUtils.error(e);
-            throw new RuntimeException("参数获取入参失败");
+            throw new RuntimeException(e.getMessage());
         }
         return (T) returnVal;
     }

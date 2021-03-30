@@ -4,14 +4,11 @@ import cn.ulyer.demo.dao.UserMapper;
 import cn.ulyer.demo.entity.User;
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.config.ResourceConfigurationLoader;
-import cn.ulyer.orm.excutor.SqlSession;
 import cn.ulyer.orm.factory.DefaultOrmFactory;
 import cn.ulyer.orm.factory.OrmFactory;
-import cn.ulyer.orm.factory.OrmFactoryBuilder;
+import cn.ulyer.orm.plugin.Page;
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.fastjson.JSON;
-import org.junit.Before;
 import org.junit.Test;
 
 import javax.sql.DataSource;
@@ -40,15 +37,11 @@ public class OrmFactoryTest {
         OrmFactory factory = new DefaultOrmFactory(configuration);
         factory.setDataSource(dataSource());
         UserMapper mapper = factory.getMapper(UserMapper.class);
-        User user = mapper.getById("1");
-        System.out.println(user);
-        SqlSession sqlSession = factory.createSqlSession();
-        User u = new User();
-        u.setName("orm 插入测试");
-        u.setId("222");
-        sqlSession.insert(UserMapper.class.getName()+"."+"saveUser",u);
-        List<Map> users = mapper.listUser();
+
+        Page<User> page = new Page<>(1,10);
+        List<Map> users = mapper.listUser(page);
         System.out.println(users);
+        System.out.println(page);
     }
 
 
