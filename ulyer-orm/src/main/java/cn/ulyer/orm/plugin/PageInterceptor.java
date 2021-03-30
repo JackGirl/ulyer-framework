@@ -53,7 +53,7 @@ public class PageInterceptor implements OrmInterceptor {
             ParameterMapping parameterMapping = parameterMappings.get(i);
             Class<?> paramClass = parameterMapping.getType();
             if(IPage.class.isAssignableFrom(paramClass)){
-                page =  parameterObject.getParameterByName(parameterMapping.getName());
+                page =  parameterObject.getParameterObjectByMapping(parameterMapping);
                 break;
             }
         }

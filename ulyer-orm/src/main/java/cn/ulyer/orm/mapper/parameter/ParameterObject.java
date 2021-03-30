@@ -1,5 +1,6 @@
 package cn.ulyer.orm.mapper.parameter;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.ulyer.orm.config.OrmConfiguration;
@@ -19,24 +20,42 @@ public class ParameterObject {
 
     private Class<?> valueClass;
 
+    private int parameterSize;
+
     private List<ParameterMapping> parameterMappings;
 
 
-    public ParameterObject(Object value, Class<?> valueClass, List<ParameterMapping> parameterMappings) {
+    public ParameterObject(Object value, Class<?> valueClass, List<ParameterMapping> parameterMappings,int parameterSize) {
         this.valueClass = valueClass;
         this.value = value;
         this.parameterMappings = parameterMappings;
+        this.parameterSize = parameterSize;
     }
 
     public static ParameterObject newParameter(MapperMethod mapperMethod, Object... parameter) {
         if (parameter == null) {
-            return new ParameterObject(null, String.class, mapperMethod.getParameterMappings());
+            return new ParameterObject(null, String.class, mapperMethod.getParameterMappings(),0);
+        }
+        if (parameter.length == 1) {
+            return new ParameterObject(parameter[0], parameter[0].getClass(), mapperMethod.getParameterMappings(),1);
         }
         Map<String, Object> value = new HashMap<>(5);
+        int parameterMappingSize = mapperMethod.getParameterMappings()==null?0:mapperMethod.getParameterMappings().size();
         for (int i = 0; i < parameter.length; i++) {
+            if(i<parameterMappingSize-1){
+                value.put(mapperMethod.getParameterMappings().get(i).getName(), parameter[i]);
+                continue;
+            }
             value.put("arg" + i, parameter[i]);
         }
-        return new ParameterObject(value, Map.class, mapperMethod.getParameterMappings());
+        return new ParameterObject(value, Map.class, mapperMethod.getParameterMappings(),parameter.length);
+    }
+
+    public <T>T getParameterObjectByMapping(ParameterMapping parameterMapping){
+        if(parameterSize==1){
+            return parameterMapping.getType().isAssignableFrom(valueClass)? (T) value :null;
+        }
+        return (T) ((Map) value).get(parameterMapping.getName());
     }
 
     public <T> T getParameterByName(String name) {
