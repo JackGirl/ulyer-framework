@@ -30,7 +30,7 @@ public class ParameterObject {
 
     public static ParameterObject newParameter(MapperMethod mapperMethod, Object... parameter) {
         if (parameter == null) {
-            return new ParameterObject(null, Object.class, mapperMethod.getParameterMappings());
+            return new ParameterObject(null, String.class, mapperMethod.getParameterMappings());
         }
         Map<String, Object> value = new HashMap<>(5);
         for (int i = 0; i < parameter.length; i++) {
