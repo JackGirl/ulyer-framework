@@ -1,7 +1,6 @@
 package cn.ulyer.orm.mapper.reader;
 
 import cn.ulyer.orm.annotation.Insert;
-import cn.ulyer.orm.annotation.Update;
 import cn.ulyer.orm.enums.MapperSqlType;
 import cn.ulyer.orm.mapper.MapperMethod;
 
@@ -16,7 +15,7 @@ public class InsertAnnotaionReader implements AnnotationReader {
         Insert insert = method.getAnnotation(Insert.class);
         if(insert!=null){
             mapperMethod.setMapperSqlType(MapperSqlType.INSERT);
-            mapperMethod.setSql(insert.sql());
+            mapperMethod.setXml("<root>"+insert.sql()+"</root>");
         }
     }
 }

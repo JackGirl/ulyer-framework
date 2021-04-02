@@ -1,9 +1,13 @@
 package cn.ulyer.orm.config;
 
+import cn.hutool.core.lang.Assert;
 import cn.ulyer.orm.mapper.handler.IntegerTypeHandler;
 import cn.ulyer.orm.mapper.handler.ListTypeHandler;
 import cn.ulyer.orm.mapper.handler.StringTypeHandler;
 import cn.ulyer.orm.mapper.handler.TypeHandler;
+import cn.ulyer.orm.tag.IFTagResolver;
+import cn.ulyer.orm.tag.TagResolver;
+import cn.ulyer.orm.tag.WhereTagResolver;
 
 import java.sql.JDBCType;
 import java.util.HashMap;
@@ -17,9 +21,14 @@ public class RegisterConf {
 
     Map<JDBCType, TypeHandler> jdbcTypeTypeHandlers = new HashMap<>();
 
+    Map<String,TagResolver> tagResolvers = new HashMap<>();
+
     public RegisterConf() {
         this.registerTypeHandlers();
+        this.registerTagResolvers();
     }
+
+
 
 
     private void registerTypeHandlers() {
@@ -36,7 +45,16 @@ public class RegisterConf {
         jdbcTypeTypeHandlers.put(JDBCType.NVARCHAR,stringTypeHandler);
     }
 
+    private void registerTagResolvers() {
+        tagResolvers.put("if",new IFTagResolver());
+        tagResolvers.put("where",new WhereTagResolver());
+    }
 
+    public TagResolver getTagResolver(String tagName){
+        TagResolver tagResolver = tagResolvers.get(tagName);
+        Assert.notNull(tagResolver);
+        return tagResolver;
+    }
 
 
 }

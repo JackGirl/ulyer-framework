@@ -14,7 +14,7 @@ public class SelectAnnotationReader implements AnnotationReader {
         Select select = method.getAnnotation(Select.class);
         if(select!=null) {
             mapperMethod.setMapperSqlType(MapperSqlType.SELECT);
-            mapperMethod.setSql(select.sql());
+            mapperMethod.setXml("<root>"+select.sql()+"</root>");
         }
     }
 }

@@ -10,6 +10,8 @@
   <modules>
     <module>ulyer-orm</module>
     <module>ulyer-demo</module>
+      <module>ulyer-core</module>
+    <module>ulyer-web</module>
   </modules>
   <packaging>pom</packaging>
 

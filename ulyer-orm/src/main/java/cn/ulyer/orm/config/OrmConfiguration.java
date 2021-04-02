@@ -4,6 +4,7 @@ import cn.ulyer.orm.enums.PluginType;
 import cn.ulyer.orm.mapper.handler.*;
 import cn.ulyer.orm.plugin.OrmInterceptor;
 import cn.ulyer.orm.plugin.PluginInvocationHandler;
+import cn.ulyer.orm.tag.TagResolver;
 import lombok.Data;
 
 import java.sql.JDBCType;
@@ -34,6 +35,9 @@ public class OrmConfiguration {
     private Set<String> pluginClasses;
 
     private final RegisterConf registerConf = new RegisterConf();
+
+    public OrmConfiguration(){
+    }
 
 
     public void setBasePackages(String... packages) {
@@ -78,6 +82,9 @@ public class OrmConfiguration {
         return target;
     }
 
+    public TagResolver getTagResolver(String tagName){
+        return registerConf.getTagResolver(tagName);
+    }
 
     public void registerPlugins() {
         for (String pluginClass : pluginClasses) {

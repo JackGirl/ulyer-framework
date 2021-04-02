@@ -59,7 +59,7 @@ public class PageInterceptor implements OrmInterceptor {
         }
         if(page!=null){
             try{
-                String pageSql = pageDialect.getPageSql(page,mapperMethod.getSql());
+                String pageSql = pageDialect.getPageSql(page,mapperWrapper.getBoundSql());
                 mapperWrapper.setBoundSql(pageSql);
                 long total = executeTotalQuery(connection,mapperWrapper);
                 page.setTotal(total);

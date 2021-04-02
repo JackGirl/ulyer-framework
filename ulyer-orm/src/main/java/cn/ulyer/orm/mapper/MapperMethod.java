@@ -15,7 +15,7 @@ import java.util.Map;
 @Data
 public class MapperMethod {
 
-    private String sql;
+    private String xml;
 
     private String id;
 

@@ -4,9 +4,12 @@ import cn.hutool.core.lang.Assert;
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.mapper.MapperWrapper;
 import cn.ulyer.orm.mapper.handler.*;
+import cn.ulyer.orm.tag.DefaultTagResolver;
 import cn.ulyer.orm.utils.LogUtils;
 import lombok.Data;
 import lombok.SneakyThrows;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -189,6 +192,8 @@ public abstract class AbstractExecutor implements Executor {
         PreparedStatement statement = null;
         try{
             //标签根据参数解析
+            String sql = new DefaultTagResolver().resolverDynamicTag(mapperWrapper);
+            mapperWrapper.setBoundSql(sql);
             //生成sql
             StatementHandler statementHandler = ormConfiguration.newStatementHandler(this.statementHandler);
             statement = statementHandler.createStatement(connection,mapperWrapper);
@@ -200,6 +205,7 @@ public abstract class AbstractExecutor implements Executor {
         }
         return statement;
     }
+
 
 
 

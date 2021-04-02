@@ -1,7 +1,18 @@
 <orm namespace="cn.ulyer.demo.dao.UserMapper" version="orm1">
 
     <select id="getById">
-        select * from user where id = #{id}
+        select * from user
+        <where>
+            and id = #{id}
+        <if  test="aaaa">
+              and name = #{name}
+            <if test="bbb">
+                and id = #{id}
+            </if>
+             and name = #{name}
+        </if>
+        </where>
+
     </select>
 
 

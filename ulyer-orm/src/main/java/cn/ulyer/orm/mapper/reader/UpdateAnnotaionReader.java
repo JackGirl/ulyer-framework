@@ -14,7 +14,7 @@ public class UpdateAnnotaionReader implements AnnotationReader{
         Update update = method.getAnnotation(Update.class);
         if(update!=null) {
             mapperMethod.setMapperSqlType(MapperSqlType.UPDATE);
-            mapperMethod.setSql(update.sql());
+            mapperMethod.setXml("<root>"+update.sql()+"</root>");
         }
     }
 }

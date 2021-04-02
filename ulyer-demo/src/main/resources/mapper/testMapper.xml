@@ -2,6 +2,7 @@
 
     <select id="getUser">
         select * from test_2 where id = #{id}
+
     </select>
 
     <insert id="insert">

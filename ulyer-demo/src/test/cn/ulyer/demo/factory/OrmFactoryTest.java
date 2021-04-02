@@ -9,6 +9,7 @@ import cn.ulyer.orm.factory.OrmFactory;
 import cn.ulyer.orm.plugin.Page;
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 
 import javax.sql.DataSource;
@@ -37,11 +38,8 @@ public class OrmFactoryTest {
         OrmFactory factory = new DefaultOrmFactory(configuration);
         factory.setDataSource(dataSource());
         UserMapper mapper = factory.getMapper(UserMapper.class);
-
-        Page<User> page = new Page<>(1,10);
-        List<Map> users = mapper.listUser(page);
-        System.out.println(users);
-        System.out.println(page);
+        User u  = mapper.getById("1");
+        System.out.println(JSON.toJSONString(u));
     }
 
 

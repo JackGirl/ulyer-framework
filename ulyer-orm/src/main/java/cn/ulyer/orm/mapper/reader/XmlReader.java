@@ -53,9 +53,9 @@ public class XmlReader implements OrmFileReader {
 
     public MapperMethod get(MapperMethod mapperMethod,Element root,Element element) throws ClassNotFoundException {
         String resultType = element.attributeValue("resultType");
-        String sql = element.getText();
+        String sql = element.getStringValue();
         mapperMethod.setId(root.attributeValue("namespace")+"."+element.attributeValue("id"));
-        mapperMethod.setSql(sql);
+        mapperMethod.setXml(element.asXML());
         if(StrUtil.isNotBlank(resultType)){
             mapperMethod.setResultType(Class.forName(resultType));
         }

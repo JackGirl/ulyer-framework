@@ -14,7 +14,7 @@ public class DeleteAnnotationReader implements AnnotationReader{
         Delete delete = method.getAnnotation(Delete.class);
         if(delete!=null){
             mapperMethod.setMapperSqlType(MapperSqlType.DELETE);
-            mapperMethod.setSql(delete.sql());
+            mapperMethod.setXml("<root>"+delete.sql()+"</root>");
         }
     }
 }

@@ -49,7 +49,7 @@ public class MapMapperProvider  implements MapperProvider{
         MapperMethod mapperMethod = mapperDefinition.getMapperMethodMap().get(namespace);
         Assert.notNull(mapperMethod,"no sqlId for namespace :"+namespace);
         MapperWrapper mapperWrapper = new MapperWrapper();
-        mapperWrapper.setBoundSql(mapperMethod.getSql());
+        mapperWrapper.setBoundSql(mapperMethod.getXml());
         mapperWrapper.setMapperMethod(mapperMethod);
         mapperWrapper.setOrmConfiguration(ormConfiguration);
         mapperWrapper.setMapperDefinition(mapperDefinition);

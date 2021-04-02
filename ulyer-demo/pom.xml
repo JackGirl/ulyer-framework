@@ -27,6 +27,12 @@
         </dependency>
 
 
+        <!-- https://mvnrepository.com/artifact/jaxen/jaxen -->
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.2.0</version>
+        </dependency>
 
         <dependency>
             <groupId>cn.ulyer</groupId>

@@ -2,6 +2,7 @@ package cn.ulyer.demo.dao;
 
 import cn.ulyer.demo.entity.User;
 import cn.ulyer.orm.annotation.Insert;
+import cn.ulyer.orm.annotation.Param;
 import cn.ulyer.orm.annotation.Select;
 import cn.ulyer.orm.plugin.IPage;
 
@@ -14,7 +15,7 @@ public interface UserMapper {
     int saveUser(User user);
 
 
-    User getById(String id);
+    User getById(@Param("id") String id);
 
 
     @Select(sql = "select * from user ")

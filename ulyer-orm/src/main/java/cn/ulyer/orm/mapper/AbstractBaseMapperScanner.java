@@ -64,8 +64,8 @@ public abstract class AbstractBaseMapperScanner implements MapperScanner {
                     mapper.getMapperMethodMap().put(k,v);
                 }else{
                     MapperMethod mapperMethod = mapper.getMapperMethodMap().get(k);
-                    if(StrUtil.isBlank(mapperMethod.getSql())){
-                        mapperMethod.setSql(v.getSql());
+                    if(StrUtil.isBlank(mapperMethod.getXml())){
+                        mapperMethod.setXml(v.getXml());
                     }
                     mapperMethod.setMapperSqlType(v.getMapperSqlType());
                 }
