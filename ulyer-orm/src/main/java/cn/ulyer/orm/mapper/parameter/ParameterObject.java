@@ -44,7 +44,7 @@ public class ParameterObject {
                 value.put(mapperMethod.getParameterMappings().get(i).getName(), parameter[i]);
                 continue;
             }
-            value.put("arg" + i, parameter[i]);
+            value.put(OrmConfiguration.DEFAULT_PARAM_PREFIX+i, parameter[i]);
         }
         return new ParameterObject(value, Map.class, mapperMethod.getParameterMappings(),parameter.length);
     }
