@@ -1,6 +1,5 @@
 package cn.ulyer.orm.mapper.parameter;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.ulyer.orm.config.OrmConfiguration;
@@ -23,7 +22,6 @@ public class ParameterObject {
     private int parameterSize;
 
     private List<ParameterMapping> parameterMappings;
-
 
     public ParameterObject(Object value, Class<?> valueClass, List<ParameterMapping> parameterMappings,int parameterSize) {
         this.valueClass = valueClass;

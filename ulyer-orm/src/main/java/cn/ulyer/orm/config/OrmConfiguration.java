@@ -18,6 +18,11 @@ public class OrmConfiguration {
 
     private List<OrmInterceptor> interceptors = new ArrayList<>();
 
+    /**
+     * use with index  0 1 2 3..
+     */
+    public final static String DEFAULT_PARAM_PREFIX = "#params";
+
     public final static String PARAM_SPLIT = ".";
 
     public final static String PARAM_REGEX = "#\\{(.+?)\\}";
