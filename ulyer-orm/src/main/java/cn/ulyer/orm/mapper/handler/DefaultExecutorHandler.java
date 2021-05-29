@@ -4,6 +4,7 @@ import cn.ulyer.orm.utils.LogUtils;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class DefaultExecutorHandler implements ExecutorHandler{
 
@@ -20,10 +21,11 @@ public class DefaultExecutorHandler implements ExecutorHandler{
     }
 
     @Override
-    public ResultSet query(PreparedStatement preparedStatement) {
+    public ResultSet query(PreparedStatement preparedStatement)  {
         LogUtils.info(preparedStatement);
         try{
-            return preparedStatement.executeQuery();
+            ResultSet resultSet =  preparedStatement.executeQuery();
+            return resultSet;
         }catch (Exception e){
             LogUtils.error(e);
             return null;

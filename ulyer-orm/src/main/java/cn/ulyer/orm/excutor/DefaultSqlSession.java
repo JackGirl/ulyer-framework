@@ -6,6 +6,7 @@ import cn.ulyer.orm.mapper.MapperWrapper;
 import lombok.SneakyThrows;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DefaultSqlSession implements SqlSession{
@@ -46,7 +47,7 @@ public class DefaultSqlSession implements SqlSession{
     }
 
     @Override
-    public <T> T selectOne(String namespace, Object... params) {
+    public <T> T selectOne(String namespace, Object... params) throws SQLException {
         return executor.selectOne(mapperWrapper(namespace,params));
     }
 

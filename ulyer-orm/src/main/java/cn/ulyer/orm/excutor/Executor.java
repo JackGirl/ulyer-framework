@@ -3,6 +3,7 @@ package cn.ulyer.orm.excutor;
 
 import cn.ulyer.orm.mapper.MapperWrapper;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -13,9 +14,9 @@ import java.util.List;
 public interface Executor {
 
 
-    <E> List<E> selectList(MapperWrapper mapperWrapper);
+    <E> List<E> selectList(MapperWrapper mapperWrapper) ;
 
-    <T> T selectOne(MapperWrapper mapperWrapper);
+    <T> T selectOne(MapperWrapper mapperWrapper) throws SQLException;
 
     int insert(MapperWrapper mapperWrapper);
 
