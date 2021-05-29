@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class OrmFactoryTest {
 
 
     @Test
-    public void flow() throws FileNotFoundException {
+    public void flow() throws IOException {
         OrmConfiguration configuration = ResourceConfigurationLoader.loadConfiguration("orm.yml");
         OrmFactory factory = new DefaultOrmFactory(configuration);
         factory.setDataSource(dataSource());

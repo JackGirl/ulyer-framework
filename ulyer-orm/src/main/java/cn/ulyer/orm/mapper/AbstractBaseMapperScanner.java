@@ -1,6 +1,7 @@
 package cn.ulyer.orm.mapper;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.ulyer.orm.config.OrmConfiguration;
 import cn.ulyer.orm.utils.LogUtils;
@@ -35,18 +36,21 @@ public abstract class AbstractBaseMapperScanner implements MapperScanner {
             for (String basePackage : basePackages) {
                 ResourceUtils.loadClassFromFile(basePackage,jarClasses);
                 for (Class<?> jarClass : jarClasses) {
-                    mappers.put(jarClass.getName(), register(jarClass));
+                    if(jarClass.isInterface()){
+                        mappers.put(jarClass.getName(), register(jarClass));
+                    }
                 }
             }
         } catch (Exception e) {
             LogUtils.error(e);
         }
         for (String location : configuration.getMapperLocations()){
-            File mapperLocationDir = new File(Thread.currentThread().getContextClassLoader().getResource(location).getPath());
-            List<File> xmlFiles = ResourceUtils.loadFileFromDir(mapperLocationDir);
-            for (File xmlFile : xmlFiles) {
-                MapperDefinition mapperDefinition  = register(new FileInputStream(xmlFile));
-                registerMapper(mapperDefinition,mappers);
+            List<InputStream> xmlFiles = ResourceUtils.loadInputStreamFromURL(location,"xml");
+            if(CollectionUtil.isNotEmpty(xmlFiles)){
+                for (InputStream xmlFile : xmlFiles) {
+                    MapperDefinition mapperDefinition  = register(xmlFile);
+                    registerMapper(mapperDefinition,mappers);
+                }
             }
         }
         return mappers;

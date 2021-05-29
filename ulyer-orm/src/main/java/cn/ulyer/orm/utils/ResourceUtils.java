@@ -3,10 +3,10 @@ package cn.ulyer.orm.utils;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.JarURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class ResourceUtils {
 
 
     public static void loadClassFromFile(String packName,  Set<Class<?>> jarClasses) throws ClassNotFoundException, IOException {
-        URL url = Thread.currentThread().getContextClassLoader().getResource(packName.replace(".", "/"));
+        URL url = getResourceUrl(packName.replace(".", "/"));
         if(url==null){
             return;
         }
@@ -60,19 +60,53 @@ public class ResourceUtils {
         }
     }
 
-    public static List<File> loadFileFromDir(File mapperLocationDir) {
-        List<File> files = new LinkedList<>();
+    public static List<InputStream> loadFileFromDir(File mapperLocationDir) throws FileNotFoundException {
+        List<InputStream> files = new LinkedList<>();
         File[] mapperFiles = mapperLocationDir.listFiles();
         for (File mapperFile : mapperFiles) {
             if(mapperFile.isDirectory()){
                 files.addAll(loadFileFromDir(mapperFile));
             }
-                files.add(mapperFile);
+                files.add(new FileInputStream(mapperFile));
         }
         return files;
     }
 
+    public static List<InputStream> loadInputStreamFromURL(String path,String fileExt) throws IOException {
+        URL url =  getResourceUrl(path);
+        if(url==null){
+            return new LinkedList<>();
+        }
+        List<InputStream> streams = new LinkedList<>();
+        if (StrUtil.equals(url.getProtocol(), "jar")) {
+            URLConnection connection = url.openConnection();
+            JarFile jarFile = ((JarURLConnection) url.openConnection()).getJarFile();
+            Enumeration<JarEntry> jarEntryEnumeration = jarFile.entries();
+            while (jarEntryEnumeration.hasMoreElements()) {
+                JarEntry entry = jarEntryEnumeration.nextElement();
+               if( StrUtil.startWithIgnoreEquals(entry.getName(),path)){
+                   if(entry.isDirectory()){
+                       continue;
+                   }
+                   if(StrUtil.isNotBlank(fileExt)){
+                       if(!StrUtil.endWithIgnoreCase(entry.getName(),fileExt)){
+                           continue;
+                       }
+                   }
+                   streams.add(getResourceUrl(entry.getName()).openStream());
 
+               }
+            }
+        }else{
+            return loadFileFromDir(new File(getResourceUrl(path).getPath()));
+        }
+        return streams;
+    }
+
+
+    public static URL getResourceUrl(String path){
+        return Thread.currentThread().getContextClassLoader().getResource(path);
+    }
 
 
 }

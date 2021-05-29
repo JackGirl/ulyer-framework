@@ -7,6 +7,7 @@ import org.dom4j.tree.DefaultElement;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
 public class ConfigurationTest {
 
     @Test
-    public void test() throws FileNotFoundException, DocumentException {
+    public void test() throws IOException, DocumentException {
         OrmConfiguration ormConfiguration = ResourceConfigurationLoader.loadConfiguration("orm.yml");
         Document document = DocumentHelper.parseText("   \n" +
                 "        <if  test=\"\">\n" +
